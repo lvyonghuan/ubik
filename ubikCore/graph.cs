@@ -8,7 +8,7 @@ public class Graph{
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
     
     //运行时节点
-    //被转载的节点
+    //被挂载的节点
     public class RuntimeNode
     {
         //运行时节点ID
@@ -45,20 +45,20 @@ public class Graph{
         }
     }
     
-    //更新边
+    //UpdateEdge 更新边
     //以出点节点ID,入点节点ID与连接属性作为入参
     // 1.入点还未建立连接，入点与出点建立连接。
     // 2.入点已与出点A建立连接，入点改为和出点B建立连接。
     // 故只用输入入点和出点的ID即可，以检查入点为主
     // 以出点A与入点C为例
     // 1.首先节点X检测出点A是否存在，节点Y检测入点C是否存在。若不存在，则报错。存在则继续执行。
-    // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。入点C同理。
+    // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。
     // 3.入点C检查自己是否已经和其他出点建立连接。若有连接，则断开连接。
     // 4.出点A与入点C建立连接。
-    public void UpdateEdge(int opNodeId,int linkNodeId,string attribute)
+    public static void UpdateEdge(int producerNodeId,int consumerNodeId,string attribute)
     {
         //检查合法性,获取连接对象
-        CheckUpdateValid(opNodeId,linkNodeId, attribute, out var opNode, out var linkNode);
+        CheckUpdateValid(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode, out var hasconsumerNodeLinkedOtherNode);
             
         //写锁
         GraphLock.EnterWriteLock();
@@ -66,10 +66,16 @@ public class Graph{
         {
             //建立数据管道
             var ch=Channel.CreateUnbounded<Value>();
-            //向操作节点的出点添加出边，指向连接节点
-            opNode.Points.Output[attribute].Add(new Edge(linkNodeId,ch));
-            //向连接节点的入点添加入边，指向操作节点，接收来自操作节点的管道
-            linkNode.Points.Input[attribute] = new Edge(opNodeId,ch);
+            //向生产者节点的出点添加出边，指向消费者节点
+            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId,ch));
+            //若消费者节点已经和其他节点连接，则断开连接
+            if (hasconsumerNodeLinkedOtherNode)
+            {
+                DeleteEdge(consumerNode.Points.Input[attribute].NodeId,consumerNodeId,attribute);
+            }
+            
+            //更新消费者节点的入点，指向生产者节点
+            consumerNode.Points.Input[attribute] = new Edge(producerNodeId,ch);
         }
         finally
         {
@@ -77,49 +83,117 @@ public class Graph{
         }
     }
         
-    //检查添加出边合法性
-    private void CheckUpdateValid(int opNodeId,int linkNodeId, string attribute,out RuntimeNode opNode,out RuntimeNode linkNode)
+    //检查更新边合法性
+    private static void CheckUpdateValid(int producerNodeId,int consumerNodeId, string attribute,out RuntimeNode producerNode,out RuntimeNode consumerNode,out bool hasconsumerNodeLinkedOtherNode)
     {
         //读锁
         GraphLock.EnterReadLock();
         try
         {
-            //检查操作节点是否存在
-            if (!_runtimeNodes.TryGetValue(opNodeId, out var opNodeTmp))
+            //检查生产者节点是否存在
+            if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Node "+opNodeId+" not exist ");
+                throw new UbikUtil.UbikException("Node "+producerNodeId+" not exist ");
             }
-            //检查出点是否存在于操作节点中
-            if (!opNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
+            //检查出点是否存在于生产者节点中
+            if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
             {
-                throw new UbikUtil.UbikException("Output point "+attribute+" not exist ");
+                throw new UbikUtil.UbikException("Output point " + attribute + " not exist ");
             }
-                
-            //检查操作节点是否已经连接了当前连接节点
-            if (edges.Any(e => e.NodeId == linkNodeId))
+            //检查生产者节点是否已经连接了当前消费者节点
+            if (edges.Any(e => e.NodeId == consumerNodeId))
             {
-                throw new UbikUtil.UbikException("Output point already linked in node " + opNodeTmp.Node.Name);
-            }
-                
-            //检查连接节点是否存在
-            if (!_runtimeNodes.TryGetValue(linkNodeId, out var linkNodeTmp))
-            {
-                throw new UbikUtil.UbikException("Node "+linkNodeId+" not exist ");
-            }
-            //检查入点是否存在于连接节点中
-            if (!linkNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
-            {
-                throw new UbikUtil.UbikException("Input point "+attribute+" not exist in node " + linkNodeTmp.Node.Name);
+                throw new UbikUtil.UbikException("Output point already linked in node " + producerNodeTmp.Node.Name);
             }
                 
-            //检查入点是否已经和其他(包括操作节点)节点连接
-            if (edge.NodeId!=0)
+            //检查消费者节点是否存在
+            if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Input point already linked in node " + linkNodeTmp.Node.Name);
+                throw new UbikUtil.UbikException("Node "+consumerNodeId+" not exist ");
+            }
+            //检查入点是否存在于消费者节点中
+            if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
+            {
+                throw new UbikUtil.UbikException("Input point "+attribute+" not exist in node " + consumerNodeTmp.Node.Name);
             }
                 
-            opNode = opNodeTmp;
-            linkNode = linkNodeTmp;
+            //检查入点是否已经和其他(包括生产者节点)节点连接
+            hasconsumerNodeLinkedOtherNode = edge.NodeId != 0;
+                
+            producerNode = producerNodeTmp;
+            consumerNode = consumerNodeTmp;
+        }
+        finally
+        {
+            GraphLock.ExitReadLock();
+        }
+    }
+    
+    // DeleteEdge 删除节点与节点之间的边
+    // 1.首先节点X检测出点A是否存在，节点Y检测入点C是否存在。若不存在，则报错。存在则继续执行。
+    // 2.C点检查自己是否与A点存在关系，A点检查自己是否与C点存在关系。若无均报错。
+    // 3.C点清除和节点X的绑定，A点删除和节点Y的关系。
+    public static void DeleteEdge(int producerNodeId,int consumerNodeId,string attribute)
+    {
+        CheckDeleteEdge(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode);
+        
+        //写锁
+        GraphLock.EnterWriteLock();
+        try
+        {
+            //删除生产者节点中的边
+            producerNode.Points.Output[attribute].RemoveAll(e => e.NodeId == consumerNodeId);
+            
+            //重置消费者节点中的边
+            consumerNode.Points.Input[attribute] = new Edge(0,null);
+        }
+        finally
+        {
+            GraphLock.ExitWriteLock();
+        }
+    }
+
+    private static void CheckDeleteEdge(int producerNodeId,int consumerNodeId,string attribute,out RuntimeNode producerNode,out RuntimeNode consumerNode)
+    {
+        //读锁
+        GraphLock.EnterReadLock();
+        try
+        {
+            //检查生产者节点是否存在
+            if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
+            {
+                throw new UbikUtil.UbikException("Node "+producerNodeId+" not exist ");
+            }
+            //检查出点是否存在于生产者节点中
+            if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
+            {
+                throw new UbikUtil.UbikException("Output point " + attribute + " not exist ");
+            }
+            //检查生产者节点是否已经连接了当前消费者节点
+            if (edges.All(e => e.NodeId != consumerNodeId))
+            {
+                throw new UbikUtil.UbikException("Output point not linked in node " + producerNodeTmp.Node.Name);
+            }
+                
+            //检查消费者节点是否存在
+            if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
+            {
+                throw new UbikUtil.UbikException("Node "+consumerNodeId+" not exist ");
+            }
+            //检查入点是否存在于消费者节点中
+            if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
+            {
+                throw new UbikUtil.UbikException("Input point " + attribute + " not exist in node " +
+                                                 consumerNodeTmp.Node.Name);
+            }
+            //检查入点是否已经生产者节点连接
+            if (edge.NodeId != producerNodeId)
+            {
+                throw new UbikUtil.UbikException("Input point not linked in node " + consumerNodeTmp.Node.Name);
+            }
+                
+            producerNode = producerNodeTmp;
+            consumerNode = consumerNodeTmp;
         }
         finally
         {
