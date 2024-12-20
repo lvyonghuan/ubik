@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ubikCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8de2f83a359108c3586dfc1e979327aea65e99c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("ubikCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ubikCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

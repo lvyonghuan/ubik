@@ -28,7 +28,7 @@ public class Node(string name, string info, bool isBeginningNode, Dictionary<str
 // 边
 public class Edge(int id, Channel<Value> ch)
 {
-    private int _nodeId  = id; // 对应节点ID
+    public int NodeId  = id; // 对应节点ID
     public Channel<Value> Ch { get; private set; } = ch; // 边的通道。由出边生产，入边消费。
 }
 
