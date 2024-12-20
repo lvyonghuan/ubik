@@ -31,6 +31,21 @@ public class Graph{
         {
             Id = _nextId++;
             Node = node;
+            
+            //初始化节点点集
+            //初始化输入点
+            Points.Input = new Dictionary<string, Edge>();
+            foreach (var input in node.Input)
+            {
+                Points.Input.Add(input.Key,new Edge(0,null));
+            }
+            
+            //初始化输出点
+            Points.Output = new Dictionary<string, List<Edge>>();
+            foreach (var output in node.Output)
+            {
+                Points.Output.Add(output.Key,new List<Edge>());
+            }
         }
 
         //运行时节点出入点
@@ -47,7 +62,7 @@ public class Graph{
     
     //AddNode 添加节点
     //将运行时节点挂载到图中
-    private static void AddNode(RuntimeNode node)
+    public static void AddNode(RuntimeNode node)
     {
         //添加前检测
         if (node.State!=RuntimeNode.Ready)
@@ -77,7 +92,6 @@ public class Graph{
     
     //RemoveNode 删除节点
     //将运行时节点从图中卸载
-    //析构运行时节点
     public static void RemoveNode(int nodeId)
     {
         //写锁
@@ -132,7 +146,7 @@ public class Graph{
     public static void UpdateEdge(int producerNodeId,int consumerNodeId,string attribute)
     {
         //检查合法性,获取连接对象
-        CheckUpdateValid(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode, out var hasconsumerNodeLinkedOtherNode);
+        CheckUpdateValid(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
             
         //写锁
         GraphLock.EnterWriteLock();
@@ -143,7 +157,7 @@ public class Graph{
             //向生产者节点的出点添加出边，指向消费者节点
             producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId,ch));
             //若消费者节点已经和其他节点连接，则断开连接
-            if (hasconsumerNodeLinkedOtherNode)
+            if (hasConsumerNodeLinkedOtherNode)
             {
                 DeleteEdge(consumerNode.Points.Input[attribute].NodeId,consumerNodeId,attribute);
             }

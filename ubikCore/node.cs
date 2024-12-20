@@ -23,6 +23,11 @@ public class Node(string name, string info, bool isBeginningNode, Dictionary<str
     // key为参数名称
     // value为参数类型
     public Dictionary<string, string> Params { get; set; } = @params;
+
+    public void AddNode()
+    {
+        Graph.AddNode(new Graph.RuntimeNode(this));
+    }
 }
 
 // 边
