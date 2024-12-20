@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Channels;
 
 namespace ubikCore;
@@ -10,6 +7,8 @@ public class Graph{
     private static List<RuntimeNode> _enterNodes = new List<RuntimeNode>(); // 入口节点
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
     
+    private static UbikUtil.UbikLogger _logger = new UbikUtil.UbikLogger(UbikUtil.UbikLogger.DebugLevel, false, "./");
+    
     //运行时节点
     //被挂载的节点
     public class RuntimeNode
@@ -18,7 +17,7 @@ public class Graph{
         public int Id { get; private set; }
         public int State = Ready; //节点状态
 
-        private static int _nextId = 0;
+        private static int _nextId = 1;
         public Node Node { get;private set;} //节点
         public bool HasVisited = false; //是否已经被访问过，用于图的合法性检查
 
@@ -32,6 +31,7 @@ public class Graph{
 
         public RuntimeNode(Node node)
         {
+            _logger.Debug("Init node to runtime node "+node.Name);
             Id = _nextId++;
             Node = node;
             
@@ -67,6 +67,8 @@ public class Graph{
     //将运行时节点挂载到图中
     public static void AddNode(RuntimeNode node)
     {
+        _logger.Debug("Add node "+node.Node.Name+" to graph, runtime node id is "+node.Id);
+        
         //添加前检测
         if (node.State!=RuntimeNode.Ready)
         {
@@ -91,12 +93,15 @@ public class Graph{
         {
             GraphLock.ExitWriteLock();
         }
+        
+        _logger.Debug("Add node "+node.Node.Name+" to graph success, runtime node id is "+node.Id);
     }
     
     //RemoveNode 删除节点
     //将运行时节点从图中卸载
     public static void RemoveNode(int nodeId)
     {
+        _logger.Debug("Remove node "+nodeId+" from graph, runtime node id is "+nodeId);
         //写锁
         GraphLock.EnterWriteLock();
         try
@@ -134,6 +139,8 @@ public class Graph{
         {
             GraphLock.ExitWriteLock();
         }
+        
+        _logger.Debug("Remove node "+nodeId+" from graph success, runtime node id is "+nodeId);
     }
     
     //UpdateEdge 更新边
@@ -148,6 +155,8 @@ public class Graph{
     // 4.出点A与入点C建立连接。
     public static void UpdateEdge(int producerNodeId,int consumerNodeId,string attribute)
     {
+        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute);
+        
         //检查合法性,获取连接对象
         CheckUpdateValid(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
             
@@ -162,7 +171,12 @@ public class Graph{
             //若消费者节点已经和其他节点连接，则断开连接
             if (hasConsumerNodeLinkedOtherNode)
             {
+                //暂时释放写锁
+                GraphLock.ExitWriteLock();
+                //删除边关系
                 DeleteEdge(consumerNode.Points.Input[attribute].NodeId,consumerNodeId,attribute);
+                //重新获取写锁
+                GraphLock.EnterWriteLock();
             }
             
             //更新消费者节点的入点，指向生产者节点
@@ -172,6 +186,8 @@ public class Graph{
         {
             GraphLock.ExitWriteLock();
         }
+        
+        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute+" success");
     }
         
     //检查更新边合法性
@@ -226,6 +242,8 @@ public class Graph{
     // 3.C点清除和节点X的绑定，A点删除和节点Y的关系。
     public static void DeleteEdge(int producerNodeId,int consumerNodeId,string attribute)
     {
+        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute);
+        
         CheckDeleteEdge(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode);
         
         //写锁
@@ -242,6 +260,8 @@ public class Graph{
         {
             GraphLock.ExitWriteLock();
         }
+        
+        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute+" success");
     }
 
     private static void CheckDeleteEdge(int producerNodeId,int consumerNodeId,string attribute,out RuntimeNode producerNode,out RuntimeNode consumerNode)

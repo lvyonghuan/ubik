@@ -1,0 +1,7 @@
+{
+  "log": {
+    "LogLevel": 5,
+    "LogSavePath": "./example-logs",
+    "IsSaveLog": false
+  }
+}

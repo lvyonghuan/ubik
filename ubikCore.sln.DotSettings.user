@@ -5,5 +5,9 @@
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.UbikExceptionTests.TestNewUbikException&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddNode&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestDeleteNode&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddEdge&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestDeleteEdge&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddMoreEdges&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestUpdateEdge&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

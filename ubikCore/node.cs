@@ -12,17 +12,17 @@ public class Node(string name, string info, bool isBeginningNode, Dictionary<str
     public bool IsBeginningNode { get; private set; } = isBeginningNode;
     // 节点要求的输入
     // key为参数名称
-    // value为参数类型
+    // value为参数属性
     public Dictionary<string, string> Input { get; set; } = input;
 
     // 节点的输出
     // key为参数名称
-    // value为参数类型
+    // value为参数属性
     public Dictionary<string, string> Output { get; set; } = output;
 
     // 节点提供给用户自定义的参数
     // key为参数名称
-    // value为参数类型
+    // value为参数属性
     public Dictionary<string, string> Params { get; set; } = @params;
 
     public int AddNode()
