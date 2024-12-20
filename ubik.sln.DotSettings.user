@@ -1,13 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eb4c44c2_002D4639_002D4730_002D8575_002Dc9891cd429c4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestLogPrint" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.UbikLoggerTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.UbikExceptionTests.TestNewUbikException&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddNode&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestDeleteNode&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddEdge&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestDeleteEdge&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestAddMoreEdges&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikCore.TestGraph.TestUpdateEdge&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.CoreTest.TestInitCore&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
