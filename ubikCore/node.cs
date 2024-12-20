@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Channels;
 
 namespace ubikCore;
@@ -24,9 +25,11 @@ public class Node(string name, string info, bool isBeginningNode, Dictionary<str
     // value为参数类型
     public Dictionary<string, string> Params { get; set; } = @params;
 
-    public void AddNode()
+    public int AddNode()
     {
-        Graph.AddNode(new Graph.RuntimeNode(this));
+        var runtimeNode=new Graph.RuntimeNode(this);
+        Graph.AddNode(runtimeNode);
+        return runtimeNode.Id;
     }
 }
 

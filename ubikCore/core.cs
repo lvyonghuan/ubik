@@ -1,4 +1,6 @@
-﻿namespace ubikCore;
+﻿using System.Collections.Generic;
+
+namespace ubikCore;
 
 public class Core
 {
