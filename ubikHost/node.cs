@@ -4,27 +4,24 @@ namespace ubikHost;
 
 //节点类型
 //等待被转载为运行时节点
-public class Node(string name, string info, bool isBeginningNode, Dictionary<string, string> input, Dictionary<string, string> output, Dictionary<string, string> @params)
+public class Node(string name, string info, bool isBeginningNode, List<Value> input,List<Value> output, List<Value> @params)
 {
     public string Name { get; private set; } = name;
     public string Info { get; private set; } = info;
     public bool IsBeginningNode { get; private set; } = isBeginningNode;
+    
+    //FIXME 全部改成list
+    
     // 节点要求的输入
-    // key为参数名称
-    // value为参数属性
-    public Dictionary<string, string> Input { get; set; } = input;
+    public List<Value> Input { get; set; } = input;
 
     // 节点的输出
-    // key为参数名称
-    // value为参数属性
-    public Dictionary<string, string> Output { get; set; } = output;
+    public List<Value> Output { get; set; } = output;
 
     // 节点提供给用户自定义的参数
-    // key为参数名称
-    // value为参数属性
-    public Dictionary<string, string> Params { get; set; } = @params;
+    public List<Value> Params { get; set; } = @params;
 
-    public int AddNode()
+    public int AddRuntimeNode()
     {
         var runtimeNode=new Graph.RuntimeNode(this);
         Graph.AddNode(runtimeNode);

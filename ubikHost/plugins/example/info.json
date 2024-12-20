@@ -1,0 +1,130 @@
+{
+  "nodes": [
+    {
+      "Name": "nodeA",
+      "Info": "info",
+      "IsBeginningNode": false,
+      "Input": [
+        {
+        "attribute": "test1",
+        "name": "test1",
+        "type": "string"
+      },
+        {
+          "attribute": "test2",
+          "name": "test2",
+          "type": "string"
+        }
+      ],
+
+      "Output": [
+        {
+          "attribute": "test1",
+          "name": "test1",
+          "type": "string"
+        },
+        {
+          "attribute": "test2",
+          "name": "test2",
+          "type": "string"
+        }
+      ],
+      "Params":[
+        {
+          "attribute": "test1",
+          "name": "test1",
+          "type": "string"
+        },
+        {
+          "attribute": "test2",
+          "name": "test2",
+          "type": "string"
+        }
+      ]
+    },
+    
+    {
+      "Name": "nodeB",
+      "Info": "info",
+      "IsBeginningNode": true,
+      "Input": [
+        {
+            "attribute": "test3",
+            "name": "test3",
+            "type": "string"
+            },
+            {
+            "attribute": "test4",
+            "name": "test4",
+            "type": "string"
+        }
+      ],
+      "Output":[
+        {
+            "attribute": "test3",
+            "name": "test3",
+            "type": "string"
+        },
+        {
+            "attribute": "test4",
+            "name": "test4",
+            "type": "string"
+        }
+      ],
+      "Params": [
+        {
+            "attribute": "test3",
+            "name": "test3",
+            "type": "string"
+        },
+        {
+            "attribute": "test4",
+            "name": "test4",
+            "type": "string"
+        }
+      ]
+    },
+    
+    {
+      "Name": "nodeC",
+      "Info": "info",
+      "IsBeginningNode": false,
+      "Input": [
+        {
+            "attribute": "test5",
+            "name": "test5",
+            "type": "string"
+        },
+        {
+            "attribute": "test6",
+            "name": "test6",
+            "type": "string"
+        }
+      ],
+      "Output": [
+        {
+            "attribute": "test5",
+            "name": "test5",
+            "type": "string"
+        },
+        {
+            "attribute": "test6",
+            "name": "test6",
+            "type": "string"
+        }
+      ],
+      "Params": [
+        {
+            "attribute": "test5",
+            "name": "test5",
+            "type": "string"
+        },
+        {
+            "attribute": "test6",
+            "name": "test6",
+            "type": "string"
+        }
+      ]
+    }
+  ]
+}

@@ -5,20 +5,20 @@ namespace ubikHost;
 public class TestGraph
 {
     [Test]
-    public void TestAddNode()
+    public void TestAddRuntimeNode()
     {
-        var node = new Node("test", "test", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        node.AddNode();
+        var node = new Node("test", "test", true, new List<Value>(), new List<Value>(), new List<Value>());
+        node.AddRuntimeNode();
         
-        var nodeA = new Node("testA", "testA", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        nodeA.AddNode();
+        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        nodeA.AddRuntimeNode();
     }
 
     [Test]
     public void TestDeleteNode()
     {
-        var node = new Node("test", "test", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var id=node.AddNode();
+        var node = new Node("test", "test", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var id=node.AddRuntimeNode();
         
         Graph.RemoveNode(id);
     }
@@ -26,14 +26,14 @@ public class TestGraph
     [Test]
     public void TestAddEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeB = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
+        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add("test","string");
-        nodeB.Input.Add("test","string");
+        nodeA.Output.Add(new Value("test","test","string","test"));
+        nodeB.Input.Add(new Value("test","test","string","test"));
         
-        var idA=nodeA.AddNode();
-        var idB=nodeB.AddNode();
+        var idA=nodeA.AddRuntimeNode();
+        var idB=nodeB.AddRuntimeNode();
         
         Graph.UpdateEdge(idA, idB, "test");
     }
@@ -41,14 +41,14 @@ public class TestGraph
     [Test]
     public void TestDeleteEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeB = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
+        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add("test","string");
-        nodeB.Input.Add("test","string");
+        nodeA.Output.Add(new Value("test","test","string","test"));
+        nodeB.Input.Add(new Value("test","test","string","test"));
         
-        var idA=nodeA.AddNode();
-        var idB=nodeB.AddNode();
+        var idA=nodeA.AddRuntimeNode();
+        var idB=nodeB.AddRuntimeNode();
         
         Graph.UpdateEdge(idA, idB, "test");
         
@@ -58,17 +58,17 @@ public class TestGraph
     [Test]
     public void TestAddMoreEdges()
     {
-        var nodeA = new Node("testA", "testA", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeB = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeC = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
+        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add("test","string");
-        nodeB.Input.Add("test","string");
-        nodeC.Input.Add("test","string");
+        nodeA.Output.Add(new Value("test","test","string","test"));
+        nodeB.Input.Add(new Value("test","test","string","test"));
+        nodeC.Input.Add(new Value("test","test","string","test"));
         
-        var idA=nodeA.AddNode();
-        var idB=nodeB.AddNode();
-        var idC=nodeC.AddNode();
+        var idA=nodeA.AddRuntimeNode();
+        var idB=nodeB.AddRuntimeNode();
+        var idC=nodeC.AddRuntimeNode();
         
         Graph.UpdateEdge(idA, idB, "test");
         Graph.UpdateEdge(idA, idC, "test");
@@ -77,17 +77,17 @@ public class TestGraph
     [Test]
     public void TestUpdateEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeB = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
-        var nodeC = new Node("testB", "testB", true, new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, string>());
+        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add("test","string");
-        nodeB.Output.Add("test","string");
-        nodeC.Input.Add("test","string");
+        nodeA.Output.Add(new Value("test","test","string","test"));
+        nodeB.Output.Add(new Value("test","test","string","test"));
+        nodeC.Input.Add(new Value("test","test","string","test"));
         
-        var idA=nodeA.AddNode();
-        var idB=nodeB.AddNode();
-        var idC=nodeC.AddNode();
+        var idA=nodeA.AddRuntimeNode();
+        var idB=nodeB.AddRuntimeNode();
+        var idC=nodeC.AddRuntimeNode();
         
         Graph.UpdateEdge(idA, idC, "test");
         Graph.UpdateEdge(idB, idC, "test");

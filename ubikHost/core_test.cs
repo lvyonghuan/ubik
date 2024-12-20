@@ -9,6 +9,6 @@ public class CoreTest
     [Test]
     public  void TestInitCore()
     {
-        var c = new Core(ConfigPath);
+        var c = new Core(ConfigPath,true);
     }
 }

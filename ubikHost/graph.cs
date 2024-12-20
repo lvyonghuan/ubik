@@ -42,14 +42,14 @@ public class Graph{
             Points.Input = new Dictionary<string, Edge>();
             foreach (var input in node.Input)
             {
-                Points.Input.Add(input.Key,new Edge(0,null));
+                Points.Input.Add(input.Name,new Edge(0,null));
             }
             
             //初始化输出点
             Points.Output = new Dictionary<string, List<Edge>>();
             foreach (var output in node.Output)
             {
-                Points.Output.Add(output.Key,new List<Edge>());
+                Points.Output.Add(output.Name,new List<Edge>());
             }
         }
 
@@ -59,9 +59,9 @@ public class Graph{
         public class RuntimeNodePoints
         {
             public Dictionary<string, List<Edge>>
-                Output= new Dictionary<string, List<Edge>>(); // 输出点，key为参数名称，value ID值为输入点所在节点ID的集合
+                Output= new Dictionary<string, List<Edge>>(); // 输出点，key为出点名称，value ID值为输入点所在节点ID的集合
 
-            public Dictionary<string, Edge> Input = new Dictionary<string, Edge>(); // 输入点，key为参数名称，value ID值为输出点所在节点ID
+            public Dictionary<string, Edge> Input = new Dictionary<string, Edge>(); // 输入点，key为入点名称，value ID值为输出点所在节点ID
         }
     }
     
