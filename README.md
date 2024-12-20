@@ -1,4 +1,4 @@
-<p align="center">To honor Philip K. Dick.</p>
+<p align="center">To honor Philip K. Dick</p>
 
 <p align="center">I am Ubik. Before the universe was, I am. I made the suns. I made the worlds. I created
 the lives and the places they inhabit; I move them here, I put them there. They go as I say,
