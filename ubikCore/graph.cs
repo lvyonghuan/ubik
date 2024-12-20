@@ -45,6 +45,80 @@ public class Graph{
         }
     }
     
+    //AddNode 添加节点
+    //将运行时节点挂载到图中
+    private static void AddNode(RuntimeNode node)
+    {
+        //添加前检测
+        if (node.State!=RuntimeNode.Ready)
+        {
+            throw new UbikUtil.UbikException("Node "+node.Node.Name+" is not ready");
+        }
+        if (_runtimeNodes.ContainsKey(node.Id))
+        {
+            throw new UbikUtil.UbikException("Node "+node.Node.Name+"'s ID "+node.Id+" already exist in graph");
+        }
+        
+        //写锁
+        GraphLock.EnterWriteLock();
+        try
+        {
+            _runtimeNodes.Add(node.Id,node);
+            if (node.Node.IsBeginningNode)
+            {
+                _enterNodes.Add(node);
+            }
+        }
+        finally
+        {
+            GraphLock.ExitWriteLock();
+        }
+    }
+    
+    //RemoveNode 删除节点
+    //将运行时节点从图中卸载
+    //析构运行时节点
+    public static void RemoveNode(int nodeId)
+    {
+        //写锁
+        GraphLock.EnterWriteLock();
+        try
+        {
+            //删除节点
+            if (!_runtimeNodes.Remove(nodeId, out var node))
+            {
+                throw new UbikUtil.UbikException("Node "+nodeId+" not exist in graph");
+            }
+            if (node.Node.IsBeginningNode)
+            {
+                _enterNodes.Remove(node);
+            }
+            
+            //删除边
+            //删除入边关系
+            foreach (var input in node.Points.Input)
+            {
+                if (input.Value.NodeId != 0)
+                {
+                    DeleteEdge(input.Value.NodeId,nodeId,input.Key);
+                }
+            }
+            
+            //删除出边关系
+            foreach (var output in node.Points.Output)
+            {
+                foreach (var edge in output.Value)
+                {
+                    DeleteEdge(nodeId,edge.NodeId,output.Key);
+                }
+            }
+        }
+        finally
+        {
+            GraphLock.ExitWriteLock();
+        }
+    }
+    
     //UpdateEdge 更新边
     //以出点节点ID,入点节点ID与连接属性作为入参
     // 1.入点还未建立连接，入点与出点建立连接。
