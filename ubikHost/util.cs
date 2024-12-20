@@ -1,6 +1,4 @@
-using System.Text.Json;
-
-namespace ubikCore;
+namespace ubikHost;
 
 public class UbikUtil
 {

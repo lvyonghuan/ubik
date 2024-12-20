@@ -1,7 +1,6 @@
-namespace ubikCore;
-
 using NUnit.Framework;
-using System;
+
+namespace ubikHost;
 
 [TestFixture]
 public class UbikLoggerTests

@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Channels;
 
-namespace ubikCore;
+namespace ubikHost;
 
 //节点类型
 //等待被转载为运行时节点

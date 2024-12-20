@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ubikCore", "ubikCore\ubikCore.csproj", "{9DF9B368-7696-4F1D-B345-05F22EC47D60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ubikHost", "ubikHost\ubikHost.csproj", "{9DF9B368-7696-4F1D-B345-05F22EC47D60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

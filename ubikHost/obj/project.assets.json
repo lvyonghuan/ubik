@@ -681,11 +681,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubikCore\\ubikCore.csproj",
-      "projectName": "ubikCore",
-      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikCore\\ubikCore.csproj",
+      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
+      "projectName": "ubikHost",
+      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikCore\\obj\\",
+      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

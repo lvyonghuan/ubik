@@ -1,6 +1,6 @@
-﻿namespace ubikCore;
+﻿using System.Text.Json;
 
-using System.Text.Json;
+namespace ubikHost;
 
 public class Core
 {

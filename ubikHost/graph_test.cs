@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-
-namespace ubikCore;
 using NUnit.Framework;
+
+namespace ubikHost;
 
 public class TestGraph
 {

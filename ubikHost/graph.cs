@@ -1,6 +1,6 @@
 using System.Threading.Channels;
 
-namespace ubikCore;
+namespace ubikHost;
 
 public class Graph{
     private static Dictionary<int,RuntimeNode> _runtimeNodes = new Dictionary<int, RuntimeNode>(); //运行时节点, key为节点ID，value为节点
@@ -8,6 +8,8 @@ public class Graph{
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
     
     private static UbikUtil.UbikLogger _logger = new UbikUtil.UbikLogger(UbikUtil.UbikLogger.DebugLevel, false, "./");
+    
+    //TODO 图类的构造函数
     
     //运行时节点
     //被挂载的节点
