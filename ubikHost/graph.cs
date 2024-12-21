@@ -21,8 +21,7 @@ public class Graph{
 
         private static int _nextId = 1;
         public Node Node { get;private set;} //节点
-        public bool HasVisited = false; //是否已经被访问过，用于图的合法性检查
-
+        
         //节点状态定义
         public const int Running = 0;
         public const int Ready = 1;
@@ -155,8 +154,10 @@ public class Graph{
     // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。
     // 3.入点C检查自己是否已经和其他出点建立连接。若有连接，则断开连接。
     // 4.出点A与入点C建立连接。
-    public static void UpdateEdge(int producerNodeId,int consumerNodeId,string attribute)
+    public static void UpdateEdge(int producerNodeId,int consumerNodeId,Value value)
     {
+        var attribute = value.Attribute;
+            
         _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute);
         
         //检查合法性,获取连接对象
@@ -169,7 +170,7 @@ public class Graph{
             //建立数据管道
             var ch=Channel.CreateUnbounded<Value>();
             //向生产者节点的出点添加出边，指向消费者节点
-            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId,ch));
+            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId,value));
             //若消费者节点已经和其他节点连接，则断开连接
             if (hasConsumerNodeLinkedOtherNode)
             {
@@ -182,7 +183,7 @@ public class Graph{
             }
             
             //更新消费者节点的入点，指向生产者节点
-            consumerNode.Points.Input[attribute] = new Edge(producerNodeId,ch);
+            consumerNode.Points.Input[attribute] = new Edge(producerNodeId, value);
         }
         finally
         {

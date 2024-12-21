@@ -30,10 +30,21 @@ public class Node(string name, string info, bool isBeginningNode, List<Value> in
 }
 
 // 边
-public class Edge(int id, Channel<Value> ch)
+public class Edge(int nodeId,Value value)
 {
-    public int NodeId  = id; // 对应节点ID
-    public Channel<Value> Ch { get; private set; } = ch; // 边的通道。由出边生产，入边消费。
+    public int NodeId { get; private set; } = nodeId;
+    public Value Vlaue { get; private set; } = value;
+    
+    public Transport NewTransport()
+    {
+        return new Transport();
+    }
+    
+    public class Transport
+    {
+        public object Value = new object();
+        public readonly Mutex Mutex = new Mutex();
+    }
 }
 
 public class Value(string attribute, string name, string type, object value)

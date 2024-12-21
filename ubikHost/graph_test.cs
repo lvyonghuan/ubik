@@ -29,13 +29,16 @@ public class TestGraph
         var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
         var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add(new Value("test","test","string","test"));
-        nodeB.Input.Add(new Value("test","test","string","test"));
+        var valueA = new Value("test","test","string","test");
+        var valueB = new Value("test","test","string","test");
+        
+        nodeA.Output.Add(valueA);
+        nodeB.Input.Add(valueB);
         
         var idA=nodeA.AddRuntimeNode();
         var idB=nodeB.AddRuntimeNode();
         
-        Graph.UpdateEdge(idA, idB, "test");
+        Graph.UpdateEdge(idA, idB, valueA);
     }
     
     [Test]
@@ -43,16 +46,19 @@ public class TestGraph
     {
         var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
         var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+     
+        var valueA = new Value("test","test","string","test");
+        var valueB = new Value("test","test","string","test");
         
-        nodeA.Output.Add(new Value("test","test","string","test"));
-        nodeB.Input.Add(new Value("test","test","string","test"));
+        nodeA.Output.Add(valueA);
+        nodeB.Input.Add(valueB);
         
         var idA=nodeA.AddRuntimeNode();
         var idB=nodeB.AddRuntimeNode();
         
-        Graph.UpdateEdge(idA, idB, "test");
+        Graph.UpdateEdge(idA, idB, valueA);
         
-        Graph.DeleteEdge(idA, idB,"test");
+        Graph.DeleteEdge(idA, idB,valueA.Attribute);
     }
 
     [Test]
@@ -62,16 +68,20 @@ public class TestGraph
         var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add(new Value("test","test","string","test"));
-        nodeB.Input.Add(new Value("test","test","string","test"));
-        nodeC.Input.Add(new Value("test","test","string","test"));
+        var valueA = new Value("test","test","string","test");
+        var valueB = new Value("test","test","string","test");
+        var valueC = new Value("test","test","string","test");
+        
+        nodeA.Output.Add(valueA);
+        nodeB.Input.Add(valueB);
+        nodeC.Input.Add(valueC);
         
         var idA=nodeA.AddRuntimeNode();
         var idB=nodeB.AddRuntimeNode();
         var idC=nodeC.AddRuntimeNode();
         
-        Graph.UpdateEdge(idA, idB, "test");
-        Graph.UpdateEdge(idA, idC, "test");
+        Graph.UpdateEdge(idA, idB, valueA);
+        Graph.UpdateEdge(idA, idC, valueA);
     }
 
     [Test]
@@ -81,15 +91,19 @@ public class TestGraph
         var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
         
-        nodeA.Output.Add(new Value("test","test","string","test"));
-        nodeB.Output.Add(new Value("test","test","string","test"));
-        nodeC.Input.Add(new Value("test","test","string","test"));
+        var valueA = new Value("test","test","string","test");
+        var valueB = new Value("test","test","string","test");
+        var valueC = new Value("test","test","string","test");
+        
+        nodeA.Output.Add(valueA);
+        nodeB.Output.Add(valueB);
+        nodeC.Input.Add(valueC);
         
         var idA=nodeA.AddRuntimeNode();
         var idB=nodeB.AddRuntimeNode();
         var idC=nodeC.AddRuntimeNode();
         
-        Graph.UpdateEdge(idA, idC, "test");
-        Graph.UpdateEdge(idB, idC, "test");
+        Graph.UpdateEdge(idA, idC, valueA);
+        Graph.UpdateEdge(idB, idC, valueB);
     }
 }

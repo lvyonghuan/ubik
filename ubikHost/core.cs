@@ -9,18 +9,18 @@ public class Core
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
     public Graph Graph = new Graph();
     private Config _config = new Config();
-    
+
     public static UbikUtil.UbikLogger Logger { get; private set; }
-    
+
     private const string PluginPath = "./plugins";
-    
+
     private const string TestPathPrefix = "../../../";
-    
-    public Core(string configPath,bool isInTest=false)
+
+    public Core(string configPath, bool isInTest = false)
     {
         _config.ReadConfig(configPath);
         Logger = new UbikUtil.UbikLogger(_config.log.LogLevel, _config.log.IsSaveLog, _config.log.LogSavePath);
-        
+
         //加载插件
         if (!isInTest)
         {
@@ -29,19 +29,21 @@ public class Core
         else
         {
             Logger.Debug("Start loading plugin nodes");
-            Load.LoadPluginNodes(TestPathPrefix+PluginPath);
+            Load.LoadPluginNodes(TestPathPrefix + PluginPath);
         }
     }
-    
+
     private class Config
     {
         public Log log = new Log();
+
         public class Log
         {
             public int LogLevel { get; set; } = UbikUtil.UbikLogger.InfoLevel;
-            public bool IsSaveLog { get;  set; }=false;
+            public bool IsSaveLog { get; set; } = false;
             public string LogSavePath { get; set; } = "./";
         }
+
         public void ReadConfig(string filePath)
         {
             var jsonString = File.ReadAllText(filePath);
@@ -57,7 +59,7 @@ public class Core
                 Thread.Sleep(10000);
                 Environment.Exit(0);
             }
-            
+
             log.LogLevel = config.log.LogLevel;
             log.IsSaveLog = config.log.IsSaveLog;
             log.LogSavePath = config.log.LogSavePath;
@@ -71,18 +73,19 @@ public class Core
             Logger.Debug("Start loading plugin nodes");
             //访问目录，获取目录下的所有文件夹
             var pluginDirs = Directory.GetDirectories(pluginPath);
-        
+
             //遍历文件夹，访问文件夹下的info.json文件
             foreach (var pluginDir in pluginDirs)
             {
-                Logger.Debug("Start loading plugin "+Path.GetFileName(pluginDir));
+                Logger.Debug("Start loading plugin " + Path.GetFileName(pluginDir));
                 var infoPath = Path.Combine(pluginDir, "info.json");
                 var info = File.ReadAllText(infoPath);
-            
-                var pluginInfo = JsonConvert.DeserializeObject<Nodes>(info);
+
+                var pluginInfo = JsonConvert.DeserializeObject<Plugin>(info);
                 if (pluginInfo == null)
                 {
-                    Logger.Error(new UbikUtil.UbikException("load plugin "+Path.GetFileName(pluginDir)+" info error, info is null, and it should not be null"));
+                    Logger.Error(new UbikUtil.UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                            " info error, info is null, and it should not be null"));
                     continue;
                 }
 
@@ -90,28 +93,35 @@ public class Core
                 {
                     if (node == null)
                     {
-                        Logger.Error(new UbikUtil.UbikException("load plugin "+Path.GetFileName(pluginDir)+" info error, one of node is null, and it should not be null"));
+                        Logger.Error(new UbikUtil.UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                                " info error, one of node is null, and it should not be null"));
                         continue;
                     }
+
                     if (string.IsNullOrEmpty(node.Name))
                     {
-                        Logger.Error(new UbikUtil.UbikException("load plugin "+Path.GetFileName(pluginDir)+" info error, one of node name is null or empty, and it should not be null or empty"));
+                        Logger.Error(new UbikUtil.UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                                " info error, one of node name is null or empty, and it should not be null or empty"));
                         continue;
                     }
-                    
-                    Logger.Debug("Start loading node "+node.Name);
-                    if (!_nodes.TryAdd(node.Name,node))
+
+                    Logger.Debug("Start loading node " + node.Name);
+                    if (!_nodes.TryAdd(node.Name, node))
                     {
-                        Logger.Error(new UbikUtil.UbikException("load plugin "+Path.GetFileName(pluginDir)+" info error, node name "+node.Name+" is already exist, and it should not be exist"));
+                        Logger.Error(new UbikUtil.UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                                " info error, node name " + node.Name +
+                                                                " is already exist, and it should not be exist"));
                     }
-                } 
+                }
             }
+
             Logger.Debug("Loading plugin nodes success");
         }
-    
-        private class Nodes
+
+        private class Plugin
         {
-            public List<Node> nodes { get; set; }=new List<Node>();
+            public bool netCall { get; set; } = false;
+            public List<Node> nodes { get; set; } = new List<Node>();
         }
     }
 }

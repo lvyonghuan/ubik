@@ -1,4 +1,5 @@
 {
+  "netCall": false,
   "nodes": [
     {
       "Name": "nodeA",
