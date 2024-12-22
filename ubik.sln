@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ubikHost", "ubikHost\ubikHost.csproj", "{9DF9B368-7696-4F1D-B345-05F22EC47D60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ubik", "ubik\ubik.csproj", "{75F71CC7-82DE-4882-BF66-39BF5985E536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{9DF9B368-7696-4F1D-B345-05F22EC47D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DF9B368-7696-4F1D-B345-05F22EC47D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DF9B368-7696-4F1D-B345-05F22EC47D60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75F71CC7-82DE-4882-BF66-39BF5985E536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75F71CC7-82DE-4882-BF66-39BF5985E536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75F71CC7-82DE-4882-BF66-39BF5985E536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75F71CC7-82DE-4882-BF66-39BF5985E536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
