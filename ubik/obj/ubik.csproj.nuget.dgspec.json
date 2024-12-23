@@ -5,10 +5,10 @@
   },
   "projects": {
     "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj": {
-      "version": "1.0.0",
+      "version": "0.0.1",
       "restore": {
         "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj",
-        "projectName": "ubik",
+        "projectName": "yoobik",
         "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
         "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\obj\\",
@@ -39,6 +39,16 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.12.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[4.3.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

@@ -297,7 +297,7 @@
           }
         }
       },
-      "NUnit/4.3.0": {
+      "NUnit/4.3.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/nunit.framework.dll": {
@@ -618,10 +618,10 @@
         "packageIcon.png"
       ]
     },
-    "NUnit/4.3.0": {
-      "sha512": "dPClyF8aAmN8w/a7csFXUUbj0sivFVmSfX9CplV+dVeVUqnzoNFsLf7TjAPaxlrwbqHsr+F/pLd7ZEV4Sw9YHg==",
+    "NUnit/4.3.1": {
+      "sha512": "798HDjDWfo2/BVWAeqIny3hRP2z/uk2EVeTeFB69EGHQWxFZ1oVXRaobtOdkzBF4b/olUuWXDJzgtW63aBRDxg==",
       "type": "package",
-      "path": "nunit/4.3.0",
+      "path": "nunit/4.3.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -643,7 +643,7 @@
         "lib/net8.0/nunit.framework.legacy.dll",
         "lib/net8.0/nunit.framework.legacy.xml",
         "lib/net8.0/nunit.framework.xml",
-        "nunit.4.3.0.nupkg.sha512",
+        "nunit.4.3.1.nupkg.sha512",
         "nunit.nuspec"
       ]
     },
@@ -672,7 +672,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.NET.Test.Sdk >= 17.12.0",
-      "NUnit >= 4.3.0"
+      "NUnit >= 4.3.1"
     ]
   },
   "packageFolders": {
@@ -720,7 +720,7 @@
           },
           "NUnit": {
             "target": "Package",
-            "version": "[4.3.0, )"
+            "version": "[4.3.1, )"
           }
         },
         "imports": [

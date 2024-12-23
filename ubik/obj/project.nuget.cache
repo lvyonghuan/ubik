@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "9A38ARzdcOpIYWPLkWcrtUsiwfPuWuQVeh9sIGYdYYN1e9wvQ7LX+6cELrG+ALsC2ls7sTr4Ezfx9eB5VEqvvQ==",
+  "dgSpecHash": "mQ9Q9LWom3BdXCWY7TyMnyCRb7XboRfaGzwlLme+hPjSrDboODvijwF4kbdQLoD/URFJEAbrrcDApu4vWmsJAA==",
   "success": true,
   "projectFilePath": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.codecoverage\\17.12.0\\microsoft.codecoverage.17.12.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.test.sdk\\17.12.0\\microsoft.net.test.sdk.17.12.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.12.0\\microsoft.testplatform.objectmodel.17.12.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.testplatform.testhost\\17.12.0\\microsoft.testplatform.testhost.17.12.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\nunit\\4.3.1\\nunit.4.3.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512"
+  ],
   "logs": []
 }
