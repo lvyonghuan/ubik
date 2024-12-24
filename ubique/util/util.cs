@@ -16,13 +16,6 @@ public class UbikLogger
     public const int InfoLevel = 4; // 默认级别
     public const int DebugLevel = 5;
 
-    // 日志颜色
-    private const string Reset = "\033[0m";
-    private const string Red = "\033[31m";
-    private const string Orange = "\033[33m";
-    private const string Yellow = "\033[93m";
-    private const string Green = "\033[32m";
-
     // 启动时日志库初始化
     public UbikLogger(int level,bool isSave,string savePath)
     {
@@ -38,7 +31,7 @@ public class UbikLogger
     {
         if (_level < DebugLevel) return;
         var logString = "Debug: " + v;
-        Console.WriteLine(Green + logString + Reset);
+        Console.WriteLine(logString,ConsoleColor.Green);
         SaveLogToFile(logString);
     }
 
@@ -55,7 +48,7 @@ public class UbikLogger
     {
         if (_level < WarnLevel) return;
         var logString = "Warn: " + v;
-        Console.WriteLine(Yellow + logString + Reset);
+        Console.WriteLine( logString ,ConsoleColor.Yellow);
         SaveLogToFile(logString);
     }
 
@@ -64,7 +57,7 @@ public class UbikLogger
     {
         if (_level < ErrorLevel) return;
         var logString = "Error: " + v.Message;
-        Console.WriteLine(Orange + logString + Reset);
+        Console.WriteLine(logString + ConsoleColor.DarkRed);
         SaveLogToFile(logString);
     }
 
@@ -73,7 +66,7 @@ public class UbikLogger
     {
         if (_level < FatalLevel) return;
         var logString = "Fatal: " + v.Message;
-        Console.WriteLine(Red + logString + Reset);
+        Console.WriteLine(logString,ConsoleColor.Red);
         SaveLogToFile(logString);
     }
 
