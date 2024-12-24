@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using ubik.plugin;
 using ubik.util;
 
 namespace ubikHost;
@@ -30,6 +31,9 @@ public class Graph{
         
         //节点点集
         public RuntimeNodePoints Points = new RuntimeNodePoints();
+        
+        //通讯器
+        private Communicator _communicator;
 
         public RuntimeNode(Node node)
         {
@@ -42,7 +46,7 @@ public class Graph{
             Points.Input = new Dictionary<string, Edge>();
             foreach (var input in node.Input)
             {
-                Points.Input.Add(input.Name,new Edge(0,null));
+                Points.Input.Add(input.Name,new Edge(0));
             }
             
             //初始化输出点
@@ -51,6 +55,23 @@ public class Graph{
             {
                 Points.Output.Add(output.Name,new List<Edge>());
             }
+        }
+        
+        private void SetCommunicator()
+        {
+            if (Node.NeedNetCall)
+            {
+                _communicator = new CommunicatorGrpc(Id);
+            }
+            else
+            {
+                _communicator = new CommunicatorDL(Id);
+            }
+        }
+        
+        public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
+        {
+            _communicator.SetBuffer(consumerBuffers,consumerBuffer);
         }
 
         //运行时节点出入点
@@ -171,7 +192,7 @@ public class Graph{
             //建立数据管道
             var ch=Channel.CreateUnbounded<Value>();
             //向生产者节点的出点添加出边，指向消费者节点
-            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId,value));
+            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId));
             //若消费者节点已经和其他节点连接，则断开连接
             if (hasConsumerNodeLinkedOtherNode)
             {
@@ -184,7 +205,7 @@ public class Graph{
             }
             
             //更新消费者节点的入点，指向生产者节点
-            consumerNode.Points.Input[attribute] = new Edge(producerNodeId, value);
+            consumerNode.Points.Input[attribute] = new Edge(producerNodeId);
         }
         finally
         {
@@ -258,7 +279,7 @@ public class Graph{
             producerNode.Points.Output[attribute].RemoveAll(e => e.NodeId == consumerNodeId);
             
             //重置消费者节点中的边
-            consumerNode.Points.Input[attribute] = new Edge(0,null);
+            consumerNode.Points.Input[attribute] = new Edge(0);
         }
         finally
         {

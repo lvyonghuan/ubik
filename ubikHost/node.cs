@@ -1,12 +1,15 @@
+using ubik.plugin;
+
 namespace ubikHost;
 
 //节点类型
 //等待被转载为运行时节点
-public class Node(string name, string info, bool isBeginningNode, List<Value> input,List<Value> output, List<Value> @params)
+public class Node(string name, string info, bool isBeginningNode,bool needNetCall, List<Value> input,List<Value> output, List<Value> @params)
 {
     public string Name { get; private set; } = name;
     public string Info { get; private set; } = info;
     public bool IsBeginningNode { get; private set; } = isBeginningNode;
+    public bool NeedNetCall { get; private set; } = needNetCall;
     
     //FIXME 全部改成list
     
@@ -28,21 +31,10 @@ public class Node(string name, string info, bool isBeginningNode, List<Value> in
 }
 
 // 边
-public class Edge(int nodeId,Value value)
+// 边是逻辑形式的连接
+public class Edge(int nodeId)
 {
     public int NodeId { get; private set; } = nodeId;
-    public Value Vlaue { get; private set; } = value;
-    
-    public Transport NewTransport()
-    {
-        return new Transport();
-    }
-    
-    public class Transport
-    {
-        public object Value = new object();
-        public readonly Mutex Mutex = new Mutex();
-    }
 }
 
 public class Value(string attribute, string name, string type, object value)

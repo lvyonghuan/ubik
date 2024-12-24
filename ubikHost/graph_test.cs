@@ -7,17 +7,17 @@ public class TestGraph
     [Test]
     public void TestAddRuntimeNode()
     {
-        var node = new Node("test", "test", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         node.AddRuntimeNode();
         
-        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         nodeA.AddRuntimeNode();
     }
 
     [Test]
     public void TestDeleteNode()
     {
-        var node = new Node("test", "test", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         var id=node.AddRuntimeNode();
         
         Graph.RemoveNode(id);
@@ -26,8 +26,8 @@ public class TestGraph
     [Test]
     public void TestAddEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -44,8 +44,8 @@ public class TestGraph
     [Test]
     public void TestDeleteEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
      
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -64,9 +64,9 @@ public class TestGraph
     [Test]
     public void TestAddMoreEdges()
     {
-        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeC = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -87,9 +87,9 @@ public class TestGraph
     [Test]
     public void TestUpdateEdge()
     {
-        var nodeA = new Node("testA", "testA", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testB", "testB", true, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeC = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");

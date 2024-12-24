@@ -2,9 +2,11 @@ using ubique.util;
 
 namespace ubique.plugin;
 
+//The communicator allocates a buffer created by a circular
+//queue and a semaphore to a pair of points.
 public interface Communicator
 {
-    public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> senderConsumerBuffer);
+    public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer);
 }
 
 public class ConsumerBuffer
