@@ -331,6 +331,35 @@
             "related": ".xml"
           }
         }
+      },
+      "Ubique/0.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NET.Test.Sdk": "17.12.0",
+          "NUnit": "4.3.1"
+        },
+        "compile": {
+          "lib/net8.0/ubik.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/ubik.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        },
+        "contentFiles": {
+          "contentFiles/any/net8.0/testhost.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/net8.0/testhost.exe": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
       }
     }
   },
@@ -667,12 +696,30 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Ubique/0.0.1": {
+      "sha512": "x1Nb1RxOliT3mnLMdypAQvc+uJE8rVlkUXjyqFE90Sfs0LG70HjWXnpxUYFxRqs4+zDMQMXglikeDMJmBzMGCg==",
+      "type": "package",
+      "path": "ubique/0.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/testhost.dll",
+        "content/testhost.exe",
+        "contentFiles/any/net8.0/testhost.dll",
+        "contentFiles/any/net8.0/testhost.exe",
+        "lib/net8.0/ubik.dll",
+        "lib/net8.0/ubik.runtimeconfig.json",
+        "ubique.0.0.1.nupkg.sha512",
+        "ubique.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.NET.Test.Sdk >= 17.12.0",
-      "NUnit >= 4.3.1"
+      "NUnit >= 4.3.1",
+      "Ubique >= 0.0.1"
     ]
   },
   "packageFolders": {
@@ -721,6 +768,10 @@
           "NUnit": {
             "target": "Package",
             "version": "[4.3.1, )"
+          },
+          "Ubique": {
+            "target": "Package",
+            "version": "[0.0.1, )"
           }
         },
         "imports": [

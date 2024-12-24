@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj": {}
+    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {}
   },
   "projects": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj": {
-      "version": "1.0.0",
+    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {
+      "version": "0.0.1",
       "restore": {
-        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
-        "projectName": "ubikHost",
-        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
+        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+        "projectName": "Ubique",
+        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\obj\\",
+        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -47,10 +47,6 @@
             "NUnit": {
               "target": "Package",
               "version": "[4.3.1, )"
-            },
-            "Ubique": {
-              "target": "Package",
-              "version": "[0.0.1, )"
             }
           },
           "imports": [

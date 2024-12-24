@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
-namespace ubik.plugin;
+namespace ubique.plugin;
 
 [TestFixture]
 public class CommunicatorDLTest

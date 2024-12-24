@@ -1,4 +1,4 @@
-namespace ubik.plugin;
+namespace ubique.plugin;
 
 //All plugin need to implement a function,
 //IPlugin Init()

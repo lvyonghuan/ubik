@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using ubik.util;
 
 namespace ubikHost;
 
@@ -7,7 +8,7 @@ public class Graph{
     private static List<RuntimeNode> _enterNodes = new List<RuntimeNode>(); // 入口节点
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
     
-    private static UbikUtil.UbikLogger _logger = new UbikUtil.UbikLogger(UbikUtil.UbikLogger.DebugLevel, false, "./");
+    private static UbikLogger _logger = new UbikLogger(UbikLogger.DebugLevel, false, "./");
     
     //TODO 图类的构造函数
     
@@ -73,11 +74,11 @@ public class Graph{
         //添加前检测
         if (node.State!=RuntimeNode.Ready)
         {
-            throw new UbikUtil.UbikException("Node "+node.Node.Name+" is not ready");
+            throw new UbikException("Node "+node.Node.Name+" is not ready");
         }
         if (_runtimeNodes.ContainsKey(node.Id))
         {
-            throw new UbikUtil.UbikException("Node "+node.Node.Name+"'s ID "+node.Id+" already exist in graph");
+            throw new UbikException("Node "+node.Node.Name+"'s ID "+node.Id+" already exist in graph");
         }
         
         //写锁
@@ -110,7 +111,7 @@ public class Graph{
             //删除节点
             if (!_runtimeNodes.Remove(nodeId, out var node))
             {
-                throw new UbikUtil.UbikException("Node "+nodeId+" not exist in graph");
+                throw new UbikException("Node "+nodeId+" not exist in graph");
             }
             if (node.Node.IsBeginningNode)
             {
@@ -203,28 +204,28 @@ public class Graph{
             //检查生产者节点是否存在
             if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Node "+producerNodeId+" not exist ");
+                throw new UbikException("Node "+producerNodeId+" not exist ");
             }
             //检查出点是否存在于生产者节点中
             if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
             {
-                throw new UbikUtil.UbikException("Output point " + attribute + " not exist ");
+                throw new UbikException("Output point " + attribute + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
             if (edges.Any(e => e.NodeId == consumerNodeId))
             {
-                throw new UbikUtil.UbikException("Output point already linked in node " + producerNodeTmp.Node.Name);
+                throw new UbikException("Output point already linked in node " + producerNodeTmp.Node.Name);
             }
                 
             //检查消费者节点是否存在
             if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Node "+consumerNodeId+" not exist ");
+                throw new UbikException("Node "+consumerNodeId+" not exist ");
             }
             //检查入点是否存在于消费者节点中
             if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
             {
-                throw new UbikUtil.UbikException("Input point "+attribute+" not exist in node " + consumerNodeTmp.Node.Name);
+                throw new UbikException("Input point "+attribute+" not exist in node " + consumerNodeTmp.Node.Name);
             }
                 
             //检查入点是否已经和其他(包括生产者节点)节点连接
@@ -276,34 +277,34 @@ public class Graph{
             //检查生产者节点是否存在
             if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Node "+producerNodeId+" not exist ");
+                throw new UbikException("Node "+producerNodeId+" not exist ");
             }
             //检查出点是否存在于生产者节点中
             if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
             {
-                throw new UbikUtil.UbikException("Output point " + attribute + " not exist ");
+                throw new UbikException("Output point " + attribute + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
             if (edges.All(e => e.NodeId != consumerNodeId))
             {
-                throw new UbikUtil.UbikException("Output point not linked in node " + producerNodeTmp.Node.Name);
+                throw new UbikException("Output point not linked in node " + producerNodeTmp.Node.Name);
             }
                 
             //检查消费者节点是否存在
             if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
             {
-                throw new UbikUtil.UbikException("Node "+consumerNodeId+" not exist ");
+                throw new UbikException("Node "+consumerNodeId+" not exist ");
             }
             //检查入点是否存在于消费者节点中
             if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
             {
-                throw new UbikUtil.UbikException("Input point " + attribute + " not exist in node " +
+                throw new UbikException("Input point " + attribute + " not exist in node " +
                                                  consumerNodeTmp.Node.Name);
             }
             //检查入点是否已经生产者节点连接
             if (edge.NodeId != producerNodeId)
             {
-                throw new UbikUtil.UbikException("Input point not linked in node " + consumerNodeTmp.Node.Name);
+                throw new UbikException("Input point not linked in node " + consumerNodeTmp.Node.Name);
             }
                 
             producerNode = producerNodeTmp;

@@ -1,4 +1,4 @@
-namespace ubik.util;
+namespace ubique.util;
 
 public class UbikLogger
 {

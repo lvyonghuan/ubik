@@ -1,6 +1,6 @@
-using ubik.util;
+using ubique.util;
 
-namespace ubik.plugin;
+namespace ubique.plugin;
 
 public interface Communicator
 {

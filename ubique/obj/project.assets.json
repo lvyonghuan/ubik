@@ -681,11 +681,11 @@
   "project": {
     "version": "0.0.1",
     "restore": {
-      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj",
-      "projectName": "yoobik",
-      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\ubik.csproj",
+      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+      "projectName": "Ubique",
+      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubik\\obj\\",
+      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

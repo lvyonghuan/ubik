@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace ubikHost;
+namespace ubique.util;
 
 [TestFixture]
 public class UbikLoggerTests
@@ -8,7 +8,7 @@ public class UbikLoggerTests
     [Test]
     public void TestLogPrint()
     {
-        var logger = new UbikUtil.UbikLogger(UbikUtil.UbikLogger.DebugLevel, false, "");
+        var logger = new UbikLogger(UbikLogger.DebugLevel, false, "");
         logger.Debug("test debug");
         logger.Info("test info");
         logger.Warn("test warn");
@@ -21,7 +21,7 @@ public class UbikLoggerTests
     [Test]
     public void TestLogSave()
     {
-        var logger = new UbikUtil.UbikLogger(5, true, "./");
+        var logger = new UbikLogger(5, true, "./");
         logger.Debug("test debug");
         logger.Info("test info");
         logger.Warn("test warn");
@@ -38,7 +38,7 @@ public class UbikExceptionTests
     [Test]
     public void TestNewUbikException()
     {
-        var ex = new UbikUtil.UbikException("an error occurred");
+        var ex = new UbikException("an error occurred");
         TestContext.WriteLine(ex.ToString());
         TestContext.WriteLine(ex.ErrorMessage);
     }

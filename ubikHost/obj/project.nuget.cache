@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jObAsDidl6OdRQAJLVknWjuqAptFy34kjyZGRS8dlyC2YkgSiNwTUYjPZHijvGCjL5oXcZn/I2ypbJEUc9U7tw==",
+  "dgSpecHash": "JpVEppJZ2enxzW969TaMx0H5y6NEG/g8nu/htu9thwomsbkYG5gC163u3dcIIW/ibA8Rw5/ze+oWXtEnO4o/Cw==",
   "success": true,
   "projectFilePath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
   "expectedPackageFiles": [
@@ -10,7 +10,8 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.testplatform.testhost\\17.12.0\\microsoft.testplatform.testhost.17.12.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\nunit\\4.3.1\\nunit.4.3.1.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\ubique\\0.0.1\\ubique.0.0.1.nupkg.sha512"
   ],
   "logs": []
 }
