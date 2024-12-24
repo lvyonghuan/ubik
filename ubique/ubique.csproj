@@ -10,11 +10,12 @@
         <Copyright>lvyonghuan</Copyright>
         <PackageProjectUrl>https://github.com/lvyonghuan/ubik</PackageProjectUrl>
         <RepositoryUrl>https://github.com/lvyonghuan/ubik</RepositoryUrl>
-        <Version>0.0.1</Version>
+        <Version>0.0.3</Version>
         <PackageId>Ubique</PackageId>
         <Title></Title>
         <Description>Some class and interface to help build ubik program.</Description>
         <RootNamespace>ubique</RootNamespace>
+        <PackageReleaseNotes>Rebuild the communicator for concurrent scene, and do more stupid simple tests.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

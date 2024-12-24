@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using ubik.util;
+using ubique.util;
 
 namespace ubikHost;
 

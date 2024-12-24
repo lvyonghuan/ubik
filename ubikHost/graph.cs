@@ -1,6 +1,6 @@
 using System.Threading.Channels;
-using ubik.plugin;
-using ubik.util;
+using ubique.plugin;
+using ubique.util;
 
 namespace ubikHost;
 

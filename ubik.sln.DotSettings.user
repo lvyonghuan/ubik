@@ -6,5 +6,6 @@
     &lt;TestId&gt;NUnit3x::75F71CC7-82DE-4882-BF66-39BF5985E536::net8.0::ubik.util.UbikLoggerTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::75F71CC7-82DE-4882-BF66-39BF5985E536::net8.0::ubik.plugin.CommunicatorDLTest.TestCommunicatorDL&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::75F71CC7-82DE-4882-BF66-39BF5985E536::net8.0::ubique.util.UbikLoggerTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::75F71CC7-82DE-4882-BF66-39BF5985E536::net8.0::ubique.plugin.CommunicatorDLTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -679,7 +679,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "0.0.1",
+    "version": "0.0.3",
     "restore": {
       "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
       "projectName": "Ubique",

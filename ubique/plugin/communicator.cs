@@ -1,3 +1,4 @@
+using System.Threading.Channels;
 using ubique.util;
 
 namespace ubique.plugin;
@@ -11,8 +12,7 @@ public interface Communicator
 
 public class ConsumerBuffer
 {
-    public Queue<object> Buffer=new Queue<object>();
-    public readonly Semaphore Semaphore=new Semaphore(0,int.MaxValue);
+    public Channel<object> Ch = Channel.CreateUnbounded<object>();
 }
 
 public class CommunicatorDL(int runtimeNodeId):Communicator
@@ -30,30 +30,27 @@ public class CommunicatorDL(int runtimeNodeId):Communicator
         _consumerBuffer=consumerBuffer;
     }
 
-    public void Send(string pointName,object message)
+    public async void Send(string pointName,object message)
     {
+        _logger.Debug("Sending data in point: " + pointName + " ,node id: " + _runtimeNodeId);
         var consumerBuffers=_consumerBuffers[pointName];
         foreach (var consumerBuffer in consumerBuffers)
         {
-            //write the message to the buffer.
-            consumerBuffer.Buffer.Enqueue(message);
-            
-            _logger.Debug("Message sent to point: "+pointName+" ,node id: "+_runtimeNodeId);
-            //Then producer will do p operation to notice the consumer.
-            consumerBuffer.Semaphore.Release();
+            await consumerBuffer.Ch.Writer.WriteAsync(message);
         }
     }
 
-    public object Receive(string pointName)
+    public async Task<object> Receive(string pointName)
     {
-        var consumerBuffer=_consumerBuffer[pointName];
-     
-        _logger.Debug("Waiting for data arrival in point: "+pointName+" ,node id: "+_runtimeNodeId);
-        consumerBuffer.Semaphore.WaitOne();//consumer will do v operation to wait for the data.
-        _logger.Debug("Data arrived in point: "+pointName+" ,node id: "+_runtimeNodeId);
-        
-        //return the data from the upstream producer.
-        return consumerBuffer.Buffer.Dequeue();
+        var consumerBuffer = _consumerBuffer[pointName];
+
+        _logger.Debug("Waiting for data arrival in point: " + pointName + " ,node id: " + _runtimeNodeId);
+
+        // get the data from the upstream producer.
+        var result = await consumerBuffer.Ch.Reader.ReadAsync();
+        _logger.Debug("Data arrived in point: " + pointName + " ,node id: " + _runtimeNodeId);
+
+        return result;
     }
     
     public bool ReportState(int state)
