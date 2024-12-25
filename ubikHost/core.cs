@@ -6,7 +6,7 @@ namespace ubikHost;
 public class Core
 {
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
-    public Graph Graph = new Graph();
+    public Graph Graph = new Graph(Logger);
     private Config _config = new Config();
 
     public static UbikLogger Logger { get; private set; }
@@ -19,6 +19,7 @@ public class Core
     {
         _config.ReadConfig(configPath);
         Logger = new UbikLogger(_config.log.LogLevel, _config.log.IsSaveLog, _config.log.LogSavePath);
+        Graph= new Graph(Logger);
 
         //加载插件
         if (!isInTest)

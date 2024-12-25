@@ -1,3 +1,5 @@
+using ubique.plugin;
+
 namespace ubikHost;
 
 //节点类型
@@ -33,6 +35,7 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
 public class Edge(int nodeId)
 {
     public int NodeId { get; private set; } = nodeId;
+    public ConsumerBuffer Buffer { get; set; } = new ConsumerBuffer();
 }
 
 public class Value(string attribute, string name, string type, object value)

@@ -10,8 +10,33 @@ public class Graph{
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
     
     private static UbikLogger _logger = new UbikLogger(UbikLogger.DebugLevel, false, "./");
-    
-    //TODO 图类的构造函数
+
+    public Graph(UbikLogger logger)
+    {
+        _logger = logger;
+    }
+
+    public void BeforeRunSet()
+    {
+        //初始化运行时节点
+        foreach (var node in _runtimeNodes.Values)
+        {
+            //获取节点的消费者缓冲区
+            var consumerBuffers = new Dictionary<string, List<ConsumerBuffer>>();
+            var consumerBuffer = new Dictionary<string, ConsumerBuffer>();
+            
+            foreach (var output in node.Points.Output)
+            {
+                consumerBuffers.Add(output.Key,output.Value.Select(e => e.Buffer).ToList());
+            }
+            foreach (var input in node.Points.Input)
+            {
+                consumerBuffer.Add(input.Key,input.Value.Buffer);
+            }
+            
+            node.InitRuntimeNode(consumerBuffers, consumerBuffer);
+        }
+    }
     
     //运行时节点
     //被挂载的节点
@@ -57,6 +82,12 @@ public class Graph{
             }
         }
         
+        public void InitRuntimeNode(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
+        {
+            SetCommunicator();
+            SetBuffer(consumerBuffers,consumerBuffer);
+        }
+        
         private void SetCommunicator()
         {
             if (Node.NeedNetCall)
@@ -69,7 +100,7 @@ public class Graph{
             }
         }
         
-        public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
+        private void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
         {
             _communicator.SetBuffer(consumerBuffers,consumerBuffer);
         }
@@ -189,10 +220,10 @@ public class Graph{
         GraphLock.EnterWriteLock();
         try
         {
-            //建立数据管道
-            var ch=Channel.CreateUnbounded<Value>();
+            //建立生产者-消费者缓冲区
+            var consumerBuffer = new ConsumerBuffer();
             //向生产者节点的出点添加出边，指向消费者节点
-            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId));
+            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId){ Buffer = consumerBuffer });
             //若消费者节点已经和其他节点连接，则断开连接
             if (hasConsumerNodeLinkedOtherNode)
             {
@@ -205,7 +236,7 @@ public class Graph{
             }
             
             //更新消费者节点的入点，指向生产者节点
-            consumerNode.Points.Input[attribute] = new Edge(producerNodeId);
+            consumerNode.Points.Input[attribute] = new Edge(producerNodeId){ Buffer = consumerBuffer };
         }
         finally
         {
