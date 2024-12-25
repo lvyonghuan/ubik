@@ -32,9 +32,10 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
 
 // 边
 // 边是逻辑形式的连接
-public class Edge(int nodeId)
+public class Edge(int nodeId, Value value)
 {
     public int NodeId { get; private set; } = nodeId;
+    public Value Value { get; private set; }=value;
     public ConsumerBuffer Buffer { get; set; } = new ConsumerBuffer();
 }
 

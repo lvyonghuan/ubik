@@ -16,7 +16,7 @@ public class Graph{
         _logger = logger;
     }
 
-    public void BeforeRunSet()
+    public static void BeforeRunSet()
     {
         //初始化运行时节点
         foreach (var node in _runtimeNodes.Values)
@@ -71,12 +71,12 @@ public class Graph{
             Points.Input = new Dictionary<string, Edge>();
             foreach (var input in node.Input)
             {
-                Points.Input.Add(input.Name,new Edge(0));
+                Points.Input.Add(input.Name,new Edge(0,input));
             }
             
             //初始化输出点
             Points.Output = new Dictionary<string, List<Edge>>();
-            foreach (var output in node.Output)
+            foreach (var output in node.Output)//FIXME
             {
                 Points.Output.Add(output.Name,new List<Edge>());
             }
@@ -103,6 +103,20 @@ public class Graph{
         private void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
         {
             _communicator.SetBuffer(consumerBuffers,consumerBuffer);
+        }
+        
+        //测试接口//
+        //仅供测试使用，生产环境请勿调用//
+        public void SendMessage(string attribute,object message)
+        {
+            _communicator.Send(attribute,message);
+        }
+        
+        //测试接口//
+        //仅供测试使用，生产环境请勿调用//
+        public async Task<object> ReceiveMessage(string attribute)
+        {
+            return await _communicator.Receive(attribute);
         }
 
         //运行时节点出入点
@@ -170,13 +184,14 @@ public class Graph{
                 _enterNodes.Remove(node);
             }
             
+            
             //删除边
             //删除入边关系
             foreach (var input in node.Points.Input)
             {
                 if (input.Value.NodeId != 0)
                 {
-                    DeleteEdge(input.Value.NodeId,nodeId,input.Key);
+                    DeleteEdge(input.Value.NodeId,nodeId,input.Key,node.Points.Input[input.Key].Value.Name);
                 }
             }
             
@@ -185,7 +200,7 @@ public class Graph{
             {
                 foreach (var edge in output.Value)
                 {
-                    DeleteEdge(nodeId,edge.NodeId,output.Key);
+                    DeleteEdge(nodeId,edge.NodeId,output.Key,edge.Value.Name);
                 }
             }
         }
@@ -207,14 +222,15 @@ public class Graph{
     // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。
     // 3.入点C检查自己是否已经和其他出点建立连接。若有连接，则断开连接。
     // 4.出点A与入点C建立连接。
-    public static void UpdateEdge(int producerNodeId,int consumerNodeId,Value value)
+    public static void UpdateEdge(int producerNodeId,int consumerNodeId,Value producerNodePointValue,Value consumerNodePointValue)
     {
-        var attribute = value.Attribute;
+        var producerNodePointName = producerNodePointValue.Name;
+        var consumerNodePointName = consumerNodePointValue.Name;
             
-        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute);
+        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with point "+producerNodePointName);
         
         //检查合法性,获取连接对象
-        CheckUpdateValid(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
+        CheckUpdateValid(producerNodeId,consumerNodeId, producerNodePointName,consumerNodePointName, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
             
         //写锁
         GraphLock.EnterWriteLock();
@@ -223,31 +239,32 @@ public class Graph{
             //建立生产者-消费者缓冲区
             var consumerBuffer = new ConsumerBuffer();
             //向生产者节点的出点添加出边，指向消费者节点
-            producerNode.Points.Output[attribute].Add(new Edge(consumerNodeId){ Buffer = consumerBuffer });
+            producerNode.Points.Output[producerNodePointName].Add(new Edge(consumerNodeId, producerNodePointValue){ Buffer = consumerBuffer }); 
             //若消费者节点已经和其他节点连接，则断开连接
             if (hasConsumerNodeLinkedOtherNode)
             {
                 //暂时释放写锁
                 GraphLock.ExitWriteLock();
                 //删除边关系
-                DeleteEdge(consumerNode.Points.Input[attribute].NodeId,consumerNodeId,attribute);
+                var oldProducer = consumerNode.Points.Input[consumerNodePointName];
+                DeleteEdge(oldProducer.NodeId,consumerNodeId,oldProducer.Value.Name,consumerNodePointName);
                 //重新获取写锁
                 GraphLock.EnterWriteLock();
             }
             
             //更新消费者节点的入点，指向生产者节点
-            consumerNode.Points.Input[attribute] = new Edge(producerNodeId){ Buffer = consumerBuffer };
+            consumerNode.Points.Input[consumerNodePointName] = new Edge(producerNodeId, consumerNodePointValue){ Buffer = consumerBuffer };
         }
         finally
         {
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute+" success");
+        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
     }
         
     //检查更新边合法性
-    private static void CheckUpdateValid(int producerNodeId,int consumerNodeId, string attribute,out RuntimeNode producerNode,out RuntimeNode consumerNode,out bool hasconsumerNodeLinkedOtherNode)
+    private static void CheckUpdateValid(int producerNodeId,int consumerNodeId,string producerNodePointName, string consumerNodePointName,out RuntimeNode producerNode,out RuntimeNode consumerNode,out bool hasConsumerNodeLinkedOtherNode)
     {
         //读锁
         GraphLock.EnterReadLock();
@@ -259,9 +276,9 @@ public class Graph{
                 throw new UbikException("Node "+producerNodeId+" not exist ");
             }
             //检查出点是否存在于生产者节点中
-            if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
+            if (!producerNodeTmp.Points.Output.TryGetValue(producerNodePointName, out var edges))
             {
-                throw new UbikException("Output point " + attribute + " not exist ");
+                throw new UbikException("Output point " + producerNodePointName + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
             if (edges.Any(e => e.NodeId == consumerNodeId))
@@ -275,13 +292,19 @@ public class Graph{
                 throw new UbikException("Node "+consumerNodeId+" not exist ");
             }
             //检查入点是否存在于消费者节点中
-            if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
+            if (!consumerNodeTmp.Points.Input.TryGetValue(consumerNodePointName, out var edge))
             {
-                throw new UbikException("Input point "+attribute+" not exist in node " + consumerNodeTmp.Node.Name);
+                throw new UbikException("Input point "+consumerNodePointName+" not exist in node " + consumerNodeTmp.Node.Name);
             }
                 
             //检查入点是否已经和其他(包括生产者节点)节点连接
-            hasconsumerNodeLinkedOtherNode = edge.NodeId != 0;
+            hasConsumerNodeLinkedOtherNode = edge.NodeId != 0;
+            
+            //检查属性是否一致
+            if (producerNodeTmp.Node.Output.First(e => e.Name == producerNodePointName).Attribute != consumerNodeTmp.Node.Input.First(e => e.Name == consumerNodePointName).Attribute)
+            {
+                throw new UbikException("Output point "+producerNodePointName+" and input point "+consumerNodePointName+" attribute not match");
+            }
                 
             producerNode = producerNodeTmp;
             consumerNode = consumerNodeTmp;
@@ -296,31 +319,32 @@ public class Graph{
     // 1.首先节点X检测出点A是否存在，节点Y检测入点C是否存在。若不存在，则报错。存在则继续执行。
     // 2.C点检查自己是否与A点存在关系，A点检查自己是否与C点存在关系。若无均报错。
     // 3.C点清除和节点X的绑定，A点删除和节点Y的关系。
-    public static void DeleteEdge(int producerNodeId,int consumerNodeId,string attribute)
+    public static void DeleteEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName)
     {
-        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute);
+        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId);
         
-        CheckDeleteEdge(producerNodeId,consumerNodeId, attribute, out var producerNode, out var consumerNode);
+        CheckDeleteEdge(producerNodeId,consumerNodeId, producerNodePointName,consumerNodePointName, out var producerNode, out var consumerNode);
         
         //写锁
         GraphLock.EnterWriteLock();
         try
         {
             //删除生产者节点中的边
-            producerNode.Points.Output[attribute].RemoveAll(e => e.NodeId == consumerNodeId);
+            producerNode.Points.Output[producerNodePointName].RemoveAll(e => e.NodeId == consumerNodeId);
             
             //重置消费者节点中的边
-            consumerNode.Points.Input[attribute] = new Edge(0);
+            var v=consumerNode.Points.Input[consumerNodePointName].Value;
+            consumerNode.Points.Input[consumerNodePointName] = new Edge(0, v);
         }
         finally
         {
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" with attribute "+attribute+" success");
+        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
     }
 
-    private static void CheckDeleteEdge(int producerNodeId,int consumerNodeId,string attribute,out RuntimeNode producerNode,out RuntimeNode consumerNode)
+    private static void CheckDeleteEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName,out RuntimeNode producerNode,out RuntimeNode consumerNode)
     {
         //读锁
         GraphLock.EnterReadLock();
@@ -332,9 +356,9 @@ public class Graph{
                 throw new UbikException("Node "+producerNodeId+" not exist ");
             }
             //检查出点是否存在于生产者节点中
-            if (!producerNodeTmp.Points.Output.TryGetValue(attribute, out var edges))
+            if (!producerNodeTmp.Points.Output.TryGetValue(producerNodePointName, out var edges))
             {
-                throw new UbikException("Output point " + attribute + " not exist ");
+                throw new UbikException("Output point " + producerNodePointName + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
             if (edges.All(e => e.NodeId != consumerNodeId))
@@ -348,9 +372,9 @@ public class Graph{
                 throw new UbikException("Node "+consumerNodeId+" not exist ");
             }
             //检查入点是否存在于消费者节点中
-            if (!consumerNodeTmp.Points.Input.TryGetValue(attribute, out var edge))
+            if (!consumerNodeTmp.Points.Input.TryGetValue(consumerNodePointName, out var edge))
             {
-                throw new UbikException("Input point " + attribute + " not exist in node " +
+                throw new UbikException("Input point " + consumerNodePointName + " not exist in node " +
                                                  consumerNodeTmp.Node.Name);
             }
             //检查入点是否已经生产者节点连接
@@ -366,5 +390,42 @@ public class Graph{
         {
             GraphLock.ExitReadLock();
         }
+    }
+    
+    //测试接口//
+    //仅供测试使用，生产环境请勿调用//
+    public static async void SendMessage(int nodeId,string attribute,object message)
+    {
+        _logger.Debug("Send message from node "+nodeId+" with attribute "+attribute);
+        
+        //获取runtime node
+        if (!_runtimeNodes.TryGetValue(nodeId, out var node))
+        {
+            throw new UbikException("Node "+nodeId+" not exist ");
+        }
+        //发送消息
+        node.SendMessage(attribute,message);
+        
+        _logger.Debug("Send message from node "+nodeId+" with attribute "+attribute+" success");
+    }
+    
+    
+    //测试接口//
+    //仅供测试使用，生产环境请勿调用//
+    public static async Task<object> ReceiveMessage(int nodeId,string attribute)
+    {
+        _logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute);
+        
+        //获取runtime node
+        if (!_runtimeNodes.TryGetValue(nodeId, out var node))
+        {
+            throw new UbikException("Node "+nodeId+" not exist ");
+        }
+        //接收消息
+        var result = await node.ReceiveMessage(attribute);
+        
+        _logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute+" success");
+        
+        return result;
     }
 }

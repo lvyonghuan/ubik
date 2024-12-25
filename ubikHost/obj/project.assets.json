@@ -332,7 +332,7 @@
           }
         }
       },
-      "Ubique/0.0.3": {
+      "Ubique/0.0.4": {
         "type": "package",
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "17.12.0",
@@ -697,10 +697,10 @@
         "version.txt"
       ]
     },
-    "Ubique/0.0.3": {
-      "sha512": "6OpjnoH3B0aMl0iijInkVf3N2c+iRo7uU8ms+u2+zCt8sSdekLNwegl8HkG8EN3EqQ2DYhuIaNz/aMxEJCO2vQ==",
+    "Ubique/0.0.4": {
+      "sha512": "6uWNiE4JV807AfaEsMhnc9sjHHNgif20EfFeW/dQdrAv88ED1iLe1Wnoxlg0iq31r37hv947VrgWluhVpHtj4A==",
       "type": "package",
-      "path": "ubique/0.0.3",
+      "path": "ubique/0.0.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -710,7 +710,7 @@
         "contentFiles/any/net8.0/testhost.exe",
         "lib/net8.0/ubique.dll",
         "lib/net8.0/ubique.runtimeconfig.json",
-        "ubique.0.0.3.nupkg.sha512",
+        "ubique.0.0.4.nupkg.sha512",
         "ubique.nuspec"
       ]
     }
@@ -719,7 +719,7 @@
     "net8.0": [
       "Microsoft.NET.Test.Sdk >= 17.12.0",
       "NUnit >= 4.3.1",
-      "Ubique >= 0.0.3"
+      "Ubique >= 0.0.4"
     ]
   },
   "packageFolders": {
@@ -771,7 +771,7 @@
           },
           "Ubique": {
             "target": "Package",
-            "version": "[0.0.3, )"
+            "version": "[0.0.4, )"
           }
         },
         "imports": [

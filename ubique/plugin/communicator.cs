@@ -3,11 +3,14 @@ using ubique.util;
 
 namespace ubique.plugin;
 
-//The communicator allocates a buffer created by a circular
-//queue and a semaphore to a pair of points.
+//The communicator allocates a buffer created by a channel
+//Do not communicate by sharing memory;
+//instead, share memory by communicating.
 public interface Communicator
 {
     public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer);
+    public void Send(string pointName,object message);
+    public Task<object> Receive(string pointName);
 }
 
 public class ConsumerBuffer
@@ -70,6 +73,17 @@ public class CommunicatorGrpc(int runtimeNodeId):Communicator
     {
         _consumerBuffers=consumerBuffers;
         _consumerBuffer=consumerBuffer;
+    }
+    
+    public void Send(string pointName,object message)
+    {
+        //TODO
+    }
+    
+    public Task<object> Receive(string pointName)
+    {
+        //TODO
+        return Task.FromResult<object>(null);
     }
 
     //TODO
