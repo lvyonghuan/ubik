@@ -120,6 +120,10 @@ public class Core
 
         private class Plugin
         {
+            public string Name { get; set; } = "";
+            public string Version { get; set; } = "";
+            public String Description { get; set; } = "";
+            public string Author { get; set; } = "";
             public bool netCall { get; set; } = false;
             public List<Node> nodes { get; set; } = new List<Node>();
         }

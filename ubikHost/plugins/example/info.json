@@ -1,4 +1,8 @@
 {
+  "Name": "example",
+  "Description": "This is an example plugin",
+  "Version": "1.0.0",
+  "Author": "ubik",
   "netCall": false,
   "nodes": [
     {
@@ -8,12 +12,12 @@
       "Input": [
         {
         "attribute": "test1",
-        "name": "test1",
+        "name": "testPoint1",
         "type": "string"
       },
         {
           "attribute": "test2",
-          "name": "test2",
+          "name": "testPoint2",
           "type": "string"
         }
       ],
@@ -21,12 +25,12 @@
       "Output": [
         {
           "attribute": "test1",
-          "name": "test1",
+          "name": "testPoint3",
           "type": "string"
         },
         {
           "attribute": "test2",
-          "name": "test2",
+          "name": "testPoint4",
           "type": "string"
         }
       ],
