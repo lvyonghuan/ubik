@@ -7,10 +7,11 @@ public class Core
 {
     private static Dictionary<string,Plugin> _plugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
-    public Graph Graph = new Graph(Logger);
-    private Config _config = new Config();
+    public Graph Graph = new Graph();
+    private readonly Config _config = new Config();
 
     public static UbikLogger Logger { get; private set; }
+    public static OpSys OpSysType { get; private set; }
 
     private const string PluginPath = "./plugins";
 
@@ -18,9 +19,10 @@ public class Core
 
     public Core(string configPath, bool isInTest = false)
     {
+        OpSysType = JudgeOpSys();
+        
         _config.ReadConfig(configPath);
         Logger = new UbikLogger(_config.log.LogLevel, _config.log.IsSaveLog, _config.log.LogSavePath);
-        Graph= new Graph(Logger);
 
         //加载插件
         if (!isInTest)
@@ -121,4 +123,27 @@ public class Core
             Logger.Debug("Loading plugin nodes success");
         }
     }
+    
+    //判断操作系统
+    private OpSys JudgeOpSys()
+    {
+        var sys = Environment.OSVersion.Platform;
+        switch (sys)
+        {
+            case PlatformID.Win32NT:
+                return OpSys.Windows;
+            case PlatformID.Unix:
+                return OpSys.Linux;
+            default:
+                throw new UbikException("Unsupported operating system"+sys);
+            // return (int) OpSys.Other;
+        }
+    }
+}
+
+public enum OpSys
+{
+    Windows,
+    Linux,
+    Other
 }
