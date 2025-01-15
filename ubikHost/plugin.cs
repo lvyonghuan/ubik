@@ -12,13 +12,16 @@ public class Plugin
     public string Author { get; set; } = "";
     public bool NetCall { get; set; } = false;
     public List<Node> nodes { get; set; } = new List<Node>();
+    private Dictionary<int,Node> _runtimeNodes=new Dictionary<int, Node>();
+    private Dictionary<int,IRuntimeNode> _iRuntimeNodes=new Dictionary<int, IRuntimeNode>();
 
     private int _count = 0;
     private IPlugin _plugin;
 
     private const string PluginPath = "./plugins/";
 
-    public void Mount()
+    //挂载插件，返回是否被挂载
+    public bool Mount()
     {
         var opSys = Core.OpSysType;
         //如果count>0
@@ -26,26 +29,67 @@ public class Plugin
         //需要进行物理挂载
         if (_count > 0)
         {
+           if (NetCall)
+           {
+               //TODO:进行网络挂载
+           }
+           else //通过动态链接挂载
+           {
+               DlMount(opSys);
+           }
+           return true;
+        }
+        return false;
+    }
+
+    public void AddNodeToPlugin()
+    {
+        if(_plugin==null)
+        {
+            throw new UbikException("plugin " + Name + " not mounted");
+        }
+        
+        foreach (var pair in _runtimeNodes)
+        {
+            if (!_plugin.AddRuntimeNode(pair.Value.Name,pair.Key,out var iRuntimeNode))
             {
-                if (NetCall)
-                {
-                    //TODO:进行网络挂载
-                }
-                else //通过动态链接挂载
-                {
-                    DlMount(opSys);
-                }
+                throw new UbikException("add node " + pair.Value.Name + " to plugin " + Name + " failed");
+            }
+
+            if(!_iRuntimeNodes.TryAdd(pair.Key,iRuntimeNode))
+            {
+                throw new UbikException("add node " + pair.Value.Name + " to plugin " + Name + " failed");
             }
         }
     }
-
-    public void AddNode()
+    
+    public void AddCommunicationToNode(int id,Communicator communicator)
     {
+        if (!_iRuntimeNodes.TryGetValue(id, out var iRuntimeNode))
+        {
+            throw new UbikException("node " + id + " not found in plugin " + Name);
+        }
+        if (!iRuntimeNode.GetCommunicator(communicator))
+        {
+            throw new UbikException("node " + id + " get communicator failed");
+        }
+    }
+
+    public void AddNode(int id,Node node)
+    {
+        if (!_runtimeNodes.TryAdd(id, node))
+        {
+            throw new UbikException("node " + id + " already exists in plugin " + Name);
+        }
         _count++;
     }
 
-    public void RemoveNode()
+    public void RemoveNode(int id)
     {
+        if (!_runtimeNodes.Remove(id))
+        {
+            throw new UbikException("node " + id + " not found in plugin " + Name);
+        }
         _count--;
     }
 
@@ -81,15 +125,12 @@ public class Plugin
         }
 
         var path = PluginPath + Name + "/" + Name + suffix;
-        //TODO:动态链接挂载
-
         if (!File.Exists(path))
         {
             throw new UbikException("plugin " + Name + " not found");
         }
 
         IntPtr handle = NativeLibrary.Load(path);
-
         try
         {
             var ptr = NativeLibrary.GetExport(handle, "Init");

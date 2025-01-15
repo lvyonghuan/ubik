@@ -8,6 +8,7 @@ public class TestGraph
     [Test]
     public void TestAddRuntimeNode()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -20,6 +21,7 @@ public class TestGraph
     [Test]
     public void TestDeleteNode()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -31,6 +33,7 @@ public class TestGraph
     [Test]
     public void TestAddEdge()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -51,6 +54,7 @@ public class TestGraph
     [Test]
     public void TestDeleteEdge()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -73,6 +77,7 @@ public class TestGraph
     [Test]
     public void TestAddMoreEdges()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -98,6 +103,7 @@ public class TestGraph
     [Test]
     public void TestUpdateEdge()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -123,6 +129,7 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendData()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -151,6 +158,7 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendDataWithDifferentPoints()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -193,6 +201,7 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendMessageChain()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -235,6 +244,7 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendMessageChainWithDifferentPoints()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true, false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
@@ -284,6 +294,7 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestReceiveBeforeSend()
     {
+        CoreTest.TestInitCore();
         var plugin = new Plugin();
         
         var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);

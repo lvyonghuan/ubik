@@ -13,17 +13,17 @@
     <SourceRoot Include="C:\Users\Administrator\.nuget\packages\" />
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Content Include="$(NuGetPackageRoot)ubique\0.0.4\contentFiles\any\net8.0\testhost.dll" Condition="Exists('$(NuGetPackageRoot)ubique\0.0.4\contentFiles\any\net8.0\testhost.dll')">
+    <Content Include="$(NuGetPackageRoot)ubique\0.0.5\contentFiles\any\net8.0\testhost.dll" Condition="Exists('$(NuGetPackageRoot)ubique\0.0.5\contentFiles\any\net8.0\testhost.dll')">
       <NuGetPackageId>Ubique</NuGetPackageId>
-      <NuGetPackageVersion>0.0.4</NuGetPackageVersion>
+      <NuGetPackageVersion>0.0.5</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <Private>False</Private>
       <Link>testhost.dll</Link>
     </Content>
-    <Content Include="$(NuGetPackageRoot)ubique\0.0.4\contentFiles\any\net8.0\testhost.exe" Condition="Exists('$(NuGetPackageRoot)ubique\0.0.4\contentFiles\any\net8.0\testhost.exe')">
+    <Content Include="$(NuGetPackageRoot)ubique\0.0.5\contentFiles\any\net8.0\testhost.exe" Condition="Exists('$(NuGetPackageRoot)ubique\0.0.5\contentFiles\any\net8.0\testhost.exe')">
       <NuGetPackageId>Ubique</NuGetPackageId>
-      <NuGetPackageVersion>0.0.4</NuGetPackageVersion>
+      <NuGetPackageVersion>0.0.5</NuGetPackageVersion>
       <NuGetItemType>Content</NuGetItemType>
       <Pack>false</Pack>
       <Private>False</Private>

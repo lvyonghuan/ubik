@@ -23,7 +23,7 @@ public interface IRuntimeNode
     //Then the runtime node should stop and wait for
     //communicator send message to it. We use communication
     //to convey message.
-    public bool GetCommunicator(CommunicatorDL communicator);
+    public bool GetCommunicator(Communicator communicator);
 
     //To stop the runtime node.
     //The runtime node should stop and back to the state

@@ -7,7 +7,7 @@ public class CoreTest
 {
     private const string ConfigPath = "../../../example-config.json";
     [Test]
-    public  void TestInitCore()
+    public static void TestInitCore()
     {
         var c = new Core(ConfigPath,true);
     }

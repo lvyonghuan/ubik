@@ -6,6 +6,7 @@ namespace ubikHost;
 public class Core
 {
     private static Dictionary<string,Plugin> _plugins = new Dictionary<string, Plugin>();
+    private static Dictionary<string,Plugin> _MountPlugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
     public Graph Graph = new Graph();
     private readonly Config _config = new Config();
@@ -67,6 +68,38 @@ public class Core
             log.IsSaveLog = config.log.IsSaveLog;
             log.LogSavePath = config.log.LogSavePath;
         }
+    }
+
+    public static UbikException BeforeRun()
+    {
+        try
+        {
+            //挂载所有插件
+            foreach (var plugin in _plugins)
+            {
+                var isMount=plugin.Value.Mount();
+                if (isMount)
+                {
+                    _MountPlugins.TryAdd(plugin.Key, plugin.Value);
+                }
+            }
+            
+            //将逻辑节点加入插件
+            foreach (var plugin in _MountPlugins)
+            {
+                plugin.Value.AddNodeToPlugin();
+            }
+        }
+        catch (UbikException e)
+        {
+            return e;
+        }
+        catch (Exception e)
+        {
+            return new UbikException(e.Message);
+        }
+        
+        return null;
     }
 
     private class Load

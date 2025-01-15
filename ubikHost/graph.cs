@@ -91,6 +91,8 @@ public class Graph{
             {
                 _communicator = new CommunicatorDL(Id);
             }
+            
+            Node.SetCommunicator(Id,_communicator);
         }
         
         private void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
@@ -149,7 +151,8 @@ public class Graph{
             {
                 _enterNodes.Add(node);
             }
-            node.Node.AddNode();//plugin计数器加一
+            //plugin计数器加一
+            node.Node.AddNode(node.Id,node.Node);
         }
         finally
         {
@@ -197,7 +200,8 @@ public class Graph{
                     DeleteEdge(nodeId,edge.NodeId,output.Key,edge.Value.Name);
                 }
             }
-            node.Node.RemoveNode();//plugin计数器减一
+            //plugin计数器减一
+            node.Node.RemoveNode(node.Id);
         }
         finally
         {

@@ -28,14 +28,19 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
         return runtimeNode.Id;
     }
 
-    public void AddNode()
+    public void AddNode(int id,Node node)
     {
-        plugin.AddNode();
+        plugin.AddNode(id,node);
     }
 
-    public void RemoveNode()
+    public void RemoveNode(int id)
     {
-        plugin.RemoveNode();
+        plugin.RemoveNode(id);
+    }
+
+    public void SetCommunicator(int id,Communicator communicator)
+    {
+        plugin.AddCommunicationToNode(id,communicator);
     }
 }
 
