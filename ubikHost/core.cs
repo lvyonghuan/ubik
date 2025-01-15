@@ -5,6 +5,7 @@ namespace ubikHost;
 
 public class Core
 {
+    private static Dictionary<string,Plugin> _plugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
     public Graph Graph = new Graph(Logger);
     private Config _config = new Config();
@@ -88,15 +89,17 @@ public class Core
                                                             " info error, info is null, and it should not be null"));
                     continue;
                 }
+                
+                if (!_plugins.TryAdd(pluginInfo.Name, pluginInfo))
+                {
+                    Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                            " info error, plugin name " + pluginInfo.Name +
+                                                            " is already exist, and it should not be exist"));
+                    continue;
+                }
 
                 foreach (var node in pluginInfo.nodes)
                 {
-                    if (node == null)
-                    {
-                        Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
-                                                                " info error, one of node is null, and it should not be null"));
-                        continue;
-                    }
 
                     if (string.IsNullOrEmpty(node.Name))
                     {
@@ -116,16 +119,6 @@ public class Core
             }
 
             Logger.Debug("Loading plugin nodes success");
-        }
-
-        private class Plugin
-        {
-            public string Name { get; set; } = "";
-            public string Version { get; set; } = "";
-            public String Description { get; set; } = "";
-            public string Author { get; set; } = "";
-            public bool netCall { get; set; } = false;
-            public List<Node> nodes { get; set; } = new List<Node>();
         }
     }
 }

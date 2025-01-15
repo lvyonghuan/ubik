@@ -156,6 +156,7 @@ public class Graph{
             {
                 _enterNodes.Add(node);
             }
+            node.Node.AddNode();//plugin计数器加一
         }
         finally
         {
@@ -203,6 +204,7 @@ public class Graph{
                     DeleteEdge(nodeId,edge.NodeId,output.Key,edge.Value.Name);
                 }
             }
+            node.Node.RemoveNode();//plugin计数器减一
         }
         finally
         {

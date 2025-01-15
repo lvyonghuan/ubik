@@ -8,17 +8,21 @@ public class TestGraph
     [Test]
     public void TestAddRuntimeNode()
     {
-        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         node.AddRuntimeNode();
         
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         nodeA.AddRuntimeNode();
     }
 
     [Test]
     public void TestDeleteNode()
     {
-        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var node = new Node("test", "test", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         var id=node.AddRuntimeNode();
         
         Graph.RemoveNode(id);
@@ -27,8 +31,10 @@ public class TestGraph
     [Test]
     public void TestAddEdge()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -45,8 +51,10 @@ public class TestGraph
     [Test]
     public void TestDeleteEdge()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
      
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -65,9 +73,11 @@ public class TestGraph
     [Test]
     public void TestAddMoreEdges()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testBB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testB", "testBC", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testBB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeC = new Node("testB", "testBC", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -88,9 +98,11 @@ public class TestGraph
     [Test]
     public void TestUpdateEdge()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeC = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -111,8 +123,10 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendData()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");
@@ -137,9 +151,11 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendDataWithDifferentPoints()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testC", "testC", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeC = new Node("testC", "testC", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA1 = new Value("test1","test1","string","test");
         var valueA2 = new Value("test2","test2","string","test");
@@ -177,9 +193,11 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendMessageChain()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testC", "testC", true,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeC = new Node("testC", "testC", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test1","testA","string","test");
         var valueB1 = new Value("test1","testB1","string","test");
@@ -217,9 +235,11 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestSendMessageChainWithDifferentPoints()
     {
-        var nodeA = new Node("testA", "testA", true, false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", true, false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeC = new Node("testC", "testC", true, false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true, false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", true, false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeC = new Node("testC", "testC", true, false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
 
         var valueA1 = new Value("test1", "testA1", "string", "test");
         var valueB1 = new Value("test1", "testB1", "string", "test");
@@ -264,8 +284,10 @@ public class TestGraph
     [Test, AsyncStateMachine(typeof(Graph.RuntimeNode))]
     public async Task TestReceiveBeforeSend()
     {
-        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>());
-        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>());
+        var plugin = new Plugin();
+        
+        var nodeA = new Node("testA", "testA", true,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
+        var nodeB = new Node("testB", "testB", false,false, new List<Value>(), new List<Value>(), new List<Value>(), plugin);
         
         var valueA = new Value("test","test","string","test");
         var valueB = new Value("test","test","string","test");

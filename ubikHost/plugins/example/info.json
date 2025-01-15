@@ -3,7 +3,7 @@
   "Description": "This is an example plugin",
   "Version": "1.0.0",
   "Author": "ubik",
-  "netCall": false,
+  "NetCall": false,
   "nodes": [
     {
       "Name": "nodeA",

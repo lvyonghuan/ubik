@@ -4,14 +4,13 @@ namespace ubikHost;
 
 //节点类型
 //等待被转载为运行时节点
-public class Node(string name, string info, bool isBeginningNode,bool needNetCall, List<Value> input,List<Value> output, List<Value> @params)
+public class Node(string name, string info, bool isBeginningNode,bool needNetCall, List<Value> input,List<Value> output, List<Value> @params,Plugin plugin)
 {
+    private Plugin _plugin = plugin;
     public string Name { get; private set; } = name;
     public string Info { get; private set; } = info;
     public bool IsBeginningNode { get; private set; } = isBeginningNode;
     public bool NeedNetCall { get; private set; } = needNetCall;
-    
-    //FIXME 全部改成list
     
     // 节点要求的输入
     public List<Value> Input { get; set; } = input;
@@ -27,6 +26,16 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
         var runtimeNode=new Graph.RuntimeNode(this);
         Graph.AddNode(runtimeNode);
         return runtimeNode.Id;
+    }
+
+    public void AddNode()
+    {
+        plugin.AddNode();
+    }
+
+    public void RemoveNode()
+    {
+        plugin.RemoveNode();
     }
 }
 
