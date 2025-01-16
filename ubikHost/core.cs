@@ -5,11 +5,14 @@ namespace ubikHost;
 
 public class Core
 {
+    private static Dictionary<string,Plugin> _plugins = new Dictionary<string, Plugin>();
+    private static Dictionary<string,Plugin> _MountPlugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
-    public Graph Graph = new Graph(Logger);
-    private Config _config = new Config();
+    public Graph Graph = new Graph();
+    private readonly Config _config = new Config();
 
     public static UbikLogger Logger { get; private set; }
+    public static OpSys OpSysType { get; private set; }
 
     private const string PluginPath = "./plugins";
 
@@ -17,9 +20,10 @@ public class Core
 
     public Core(string configPath, bool isInTest = false)
     {
+        OpSysType = JudgeOpSys();
+        
         _config.ReadConfig(configPath);
         Logger = new UbikLogger(_config.log.LogLevel, _config.log.IsSaveLog, _config.log.LogSavePath);
-        Graph= new Graph(Logger);
 
         //加载插件
         if (!isInTest)
@@ -31,6 +35,71 @@ public class Core
             Logger.Debug("Start loading plugin nodes");
             Load.LoadPluginNodes(TestPathPrefix + PluginPath);
         }
+    }
+
+    public int AddNode(string nodeName)
+    {
+        if (!_nodes.TryGetValue(nodeName, out var node))
+        {
+            throw new UbikException("node " + nodeName + " not found");
+        }
+
+        return node.AddRuntimeNode();
+    }
+    
+    public void RemoveNode(int nodeId)
+    {
+        Graph.RemoveNode(nodeId);
+    }
+    
+    public void UpdateEdge(int producerNodeId,int consumerNodeId,string producerPointName,string consumerPointName)
+    {
+        Graph.UpdateEdge(producerNodeId,consumerNodeId,producerPointName,consumerPointName);
+    }
+    
+    public void DeleteEdge(int producerNodeId,int consumerNodeId,string producerPointName,string consumerPointName)
+    {
+        Graph.DeleteEdge(producerNodeId,consumerNodeId,producerPointName,consumerPointName);
+    }
+    
+    public UbikException BeforeRunSet()
+    {
+        try
+        {
+            //挂载所有插件
+            foreach (var plugin in _plugins)
+            {
+                Logger.Debug("Mounting plugin " + plugin.Key);
+                var isMount=plugin.Value.Mount();
+                if (isMount)
+                {
+                    _MountPlugins.TryAdd(plugin.Key, plugin.Value);
+                }
+            }
+            
+            //将逻辑节点加入插件
+            foreach (var plugin in _MountPlugins)
+            {
+                plugin.Value.AddNodeToPlugin();
+            }
+            
+            Graph.BeforeRunSet();
+        }
+        catch (UbikException e)
+        {
+            return e;
+        }
+        catch (Exception e)
+        {
+            return new UbikException(e.Message);
+        }
+        
+        return null;
+    }
+    
+    public void Run()
+    {
+        Graph.Run();
     }
 
     private class Config
@@ -88,15 +157,17 @@ public class Core
                                                             " info error, info is null, and it should not be null"));
                     continue;
                 }
+                
+                if (!_plugins.TryAdd(pluginInfo.Name, pluginInfo))
+                {
+                    Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                            " info error, plugin name " + pluginInfo.Name +
+                                                            " is already exist, and it should not be exist"));
+                    continue;
+                }
 
                 foreach (var node in pluginInfo.nodes)
                 {
-                    if (node == null)
-                    {
-                        Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
-                                                                " info error, one of node is null, and it should not be null"));
-                        continue;
-                    }
 
                     if (string.IsNullOrEmpty(node.Name))
                     {
@@ -106,6 +177,7 @@ public class Core
                     }
 
                     Logger.Debug("Start loading node " + node.Name);
+                    node.SetPlugin(pluginInfo);
                     if (!_nodes.TryAdd(node.Name, node))
                     {
                         Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
@@ -117,15 +189,28 @@ public class Core
 
             Logger.Debug("Loading plugin nodes success");
         }
-
-        private class Plugin
+    }
+    
+    //判断操作系统
+    private OpSys JudgeOpSys()
+    {
+        var sys = Environment.OSVersion.Platform;
+        switch (sys)
         {
-            public string Name { get; set; } = "";
-            public string Version { get; set; } = "";
-            public String Description { get; set; } = "";
-            public string Author { get; set; } = "";
-            public bool netCall { get; set; } = false;
-            public List<Node> nodes { get; set; } = new List<Node>();
+            case PlatformID.Win32NT:
+                return OpSys.Windows;
+            case PlatformID.Unix:
+                return OpSys.Linux;
+            default:
+                throw new UbikException("Unsupported operating system"+sys);
+            // return (int) OpSys.Other;
         }
     }
+}
+
+public enum OpSys
+{
+    Windows,
+    Linux,
+    Other
 }

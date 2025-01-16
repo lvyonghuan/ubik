@@ -1,0 +1,82 @@
+{
+  "Name": "PluginExample",
+  "Description": "This is an example plugin",
+  "Version": "1.0.0",
+  "Author": "ubik",
+  "NetCall": false,
+  "nodes": [
+    {
+      "Name": "Init",
+      "Info": "info",
+      "IsBeginningNode": true,
+      "Input": [
+        {
+        "attribute": "int",
+        "name": "receive",
+        "type": "int"
+      }
+      ],
+
+      "Output": [
+        {
+          "attribute": "int",
+          "name": "out",
+          "type": "int"
+        }
+      ],
+      "Params":[
+        {
+          "attribute": "int",
+          "name": "init_num",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "Name": "Increasing",
+      "Info": "info",
+      "IsBeginningNode": false,
+      "Input": [
+        {
+            "attribute": "int",
+            "name": "receive",
+            "type": "int"
+            }
+      ],
+      "Output":[
+        {
+            "attribute": "int",
+            "name": "out",
+            "type": "int"
+        }
+      ],
+      "Params": []
+    },
+    
+    {
+      "Name": "Add_Print",
+      "Info": "info",
+      "IsBeginningNode": false,
+      "Input": [
+        {
+            "attribute": "int",
+            "name": "num_A",
+            "type": "int"
+        },
+        {
+            "attribute": "int",
+            "name": "num_B",
+            "type": "int"
+        }
+      ],
+      "Output": [
+        {
+            "attribute": "int",
+            "name": "out",
+            "type": "int"
+        }
+      ],
+      "Params": []
+    }
+  ]
+}

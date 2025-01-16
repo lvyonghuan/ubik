@@ -8,15 +8,8 @@ public class Graph{
     private static Dictionary<int,RuntimeNode> _runtimeNodes = new Dictionary<int, RuntimeNode>(); //运行时节点, key为节点ID，value为节点
     private static List<RuntimeNode> _enterNodes = new List<RuntimeNode>(); // 入口节点
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
-    
-    private static UbikLogger _logger = new UbikLogger(UbikLogger.DebugLevel, false, "./");
 
-    public Graph(UbikLogger logger)
-    {
-        _logger = logger;
-    }
-
-    public static void BeforeRunSet()
+    public void BeforeRunSet()
     {
         //初始化运行时节点
         foreach (var node in _runtimeNodes.Values)
@@ -35,6 +28,14 @@ public class Graph{
             }
             
             node.InitRuntimeNode(consumerBuffers, consumerBuffer);
+        }
+    }
+
+    public void Run()
+    {
+        foreach (var node in _runtimeNodes.Values)
+        {
+            node.Run();
         }
     }
     
@@ -62,7 +63,7 @@ public class Graph{
 
         public RuntimeNode(Node node)
         {
-            _logger.Debug("Init node to runtime node "+node.Name);
+            Core.Logger.Debug("Init node to runtime node "+node.Name);
             Id = _nextId++;
             Node = node;
             
@@ -98,11 +99,20 @@ public class Graph{
             {
                 _communicator = new CommunicatorDL(Id);
             }
+            
+            Node.SetCommunicator(Id,_communicator);
         }
         
         private void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
         {
             _communicator.SetBuffer(consumerBuffers,consumerBuffer);
+        }
+        
+        public void Run()
+        {
+            Core.Logger.Debug("Run node "+Node.Name);
+            State = Running;
+            Node.Run(Id);
         }
         
         //测试接口//
@@ -135,7 +145,7 @@ public class Graph{
     //将运行时节点挂载到图中
     public static void AddNode(RuntimeNode node)
     {
-        _logger.Debug("Add node "+node.Node.Name+" to graph, runtime node id is "+node.Id);
+        Core.Logger.Debug("Add node "+node.Node.Name+" to graph, runtime node id is "+node.Id);
         
         //添加前检测
         if (node.State!=RuntimeNode.Ready)
@@ -156,20 +166,22 @@ public class Graph{
             {
                 _enterNodes.Add(node);
             }
+            //plugin计数器加一
+            node.Node.AddNode(node.Id,node.Node);
         }
         finally
         {
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Add node "+node.Node.Name+" to graph success, runtime node id is "+node.Id);
+        Core.Logger.Debug("Add node "+node.Node.Name+" to graph success, runtime node id is "+node.Id);
     }
     
     //RemoveNode 删除节点
     //将运行时节点从图中卸载
     public static void RemoveNode(int nodeId)
     {
-        _logger.Debug("Remove node "+nodeId+" from graph, runtime node id is "+nodeId);
+        Core.Logger.Debug("Remove node "+nodeId+" from graph, runtime node id is "+nodeId);
         //写锁
         GraphLock.EnterWriteLock();
         try
@@ -203,13 +215,15 @@ public class Graph{
                     DeleteEdge(nodeId,edge.NodeId,output.Key,edge.Value.Name);
                 }
             }
+            //plugin计数器减一
+            node.Node.RemoveNode(node.Id);
         }
         finally
         {
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Remove node "+nodeId+" from graph success, runtime node id is "+nodeId);
+        Core.Logger.Debug("Remove node "+nodeId+" from graph success, runtime node id is "+nodeId);
     }
     
     //UpdateEdge 更新边
@@ -222,15 +236,16 @@ public class Graph{
     // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。
     // 3.入点C检查自己是否已经和其他出点建立连接。若有连接，则断开连接。
     // 4.出点A与入点C建立连接。
-    public static void UpdateEdge(int producerNodeId,int consumerNodeId,Value producerNodePointValue,Value consumerNodePointValue)
+    public static void UpdateEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName)
     {
-        var producerNodePointName = producerNodePointValue.Name;
-        var consumerNodePointName = consumerNodePointValue.Name;
+        var producerNode = GetRuntimeNode(producerNodeId);
+        var consumerNode = GetRuntimeNode(consumerNodeId);
+        
             
-        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with point "+producerNodePointName);
+        Core.Logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with point "+producerNodePointName);
         
         //检查合法性,获取连接对象
-        CheckUpdateValid(producerNodeId,consumerNodeId, producerNodePointName,consumerNodePointName, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
+        CheckUpdateValid(producerNode,consumerNode, producerNodePointName,consumerNodePointName,out var producerNodePointValue,out var consumerNodePointValue, out var hasConsumerNodeLinkedOtherNode);
             
         //写锁
         GraphLock.EnterWriteLock();
@@ -260,54 +275,43 @@ public class Graph{
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
+        Core.Logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
     }
         
     //检查更新边合法性
-    private static void CheckUpdateValid(int producerNodeId,int consumerNodeId,string producerNodePointName, string consumerNodePointName,out RuntimeNode producerNode,out RuntimeNode consumerNode,out bool hasConsumerNodeLinkedOtherNode)
+    private static void CheckUpdateValid(RuntimeNode producerNode,RuntimeNode consumerNode,string producerNodePointName, string consumerNodePointName,out Value producerNodePointValue,out Value consumerNodePointValue,out bool hasConsumerNodeLinkedOtherNode)
     {
         //读锁
         GraphLock.EnterReadLock();
         try
         {
-            //检查生产者节点是否存在
-            if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
-            {
-                throw new UbikException("Node "+producerNodeId+" not exist ");
-            }
             //检查出点是否存在于生产者节点中
-            if (!producerNodeTmp.Points.Output.TryGetValue(producerNodePointName, out var edges))
+            if (!producerNode.Points.Output.TryGetValue(producerNodePointName, out var edges))
             {
                 throw new UbikException("Output point " + producerNodePointName + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
-            if (edges.Any(e => e.NodeId == consumerNodeId))
+            if (edges.Any(e => e.NodeId == consumerNode.Id))
             {
-                throw new UbikException("Output point already linked in node " + producerNodeTmp.Node.Name);
+                throw new UbikException("Output point already linked in node " + producerNode.Node.Name);
             }
-                
-            //检查消费者节点是否存在
-            if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
-            {
-                throw new UbikException("Node "+consumerNodeId+" not exist ");
-            }
+            producerNodePointValue = producerNode.Node.Output.Find(e => e.Name == producerNodePointName);
+            
             //检查入点是否存在于消费者节点中
-            if (!consumerNodeTmp.Points.Input.TryGetValue(consumerNodePointName, out var edge))
+            if (!consumerNode.Points.Input.TryGetValue(consumerNodePointName, out var edge))
             {
-                throw new UbikException("Input point "+consumerNodePointName+" not exist in node " + consumerNodeTmp.Node.Name);
+                throw new UbikException("Input point "+consumerNodePointName+" not exist in node " + consumerNode.Node.Name);
             }
+            consumerNodePointValue = edge.Value;
                 
             //检查入点是否已经和其他(包括生产者节点)节点连接
             hasConsumerNodeLinkedOtherNode = edge.NodeId != 0;
             
             //检查属性是否一致
-            if (producerNodeTmp.Node.Output.First(e => e.Name == producerNodePointName).Attribute != consumerNodeTmp.Node.Input.First(e => e.Name == consumerNodePointName).Attribute)
+            if (producerNode.Node.Output.First(e => e.Name == producerNodePointName).Attribute != consumerNode.Node.Input.First(e => e.Name == consumerNodePointName).Attribute)
             {
                 throw new UbikException("Output point "+producerNodePointName+" and input point "+consumerNodePointName+" attribute not match");
             }
-                
-            producerNode = producerNodeTmp;
-            consumerNode = consumerNodeTmp;
         }
         finally
         {
@@ -321,7 +325,7 @@ public class Graph{
     // 3.C点清除和节点X的绑定，A点删除和节点Y的关系。
     public static void DeleteEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName)
     {
-        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId);
+        Core.Logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId);
         
         CheckDeleteEdge(producerNodeId,consumerNodeId, producerNodePointName,consumerNodePointName, out var producerNode, out var consumerNode);
         
@@ -341,7 +345,7 @@ public class Graph{
             GraphLock.ExitWriteLock();
         }
         
-        _logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
+        Core.Logger.Debug("Delete edge from node "+producerNodeId+" to node "+consumerNodeId+" success");
     }
 
     private static void CheckDeleteEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName,out RuntimeNode producerNode,out RuntimeNode consumerNode)
@@ -392,11 +396,28 @@ public class Graph{
         }
     }
     
+    private static RuntimeNode GetRuntimeNode(int nodeId)
+    {
+        GraphLock.EnterReadLock();
+        try
+        {
+            if (!_runtimeNodes.TryGetValue(nodeId, out var node))
+            {
+                throw new UbikException("Node "+nodeId+" not exist ");
+            }
+            return node;
+        }
+        finally
+        {
+            GraphLock.ExitReadLock();
+        }
+    }
+    
     //测试接口//
     //仅供测试使用，生产环境请勿调用//
     public static async void SendMessage(int nodeId,string attribute,object message)
     {
-        _logger.Debug("Send message from node "+nodeId+" with attribute "+attribute);
+        Core.Logger.Debug("Send message from node "+nodeId+" with attribute "+attribute);
         
         //获取runtime node
         if (!_runtimeNodes.TryGetValue(nodeId, out var node))
@@ -406,7 +427,7 @@ public class Graph{
         //发送消息
         node.SendMessage(attribute,message);
         
-        _logger.Debug("Send message from node "+nodeId+" with attribute "+attribute+" success");
+        Core.Logger.Debug("Send message from node "+nodeId+" with attribute "+attribute+" success");
     }
     
     
@@ -414,7 +435,7 @@ public class Graph{
     //仅供测试使用，生产环境请勿调用//
     public static async Task<object> ReceiveMessage(int nodeId,string attribute)
     {
-        _logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute);
+        Core.Logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute);
         
         //获取runtime node
         if (!_runtimeNodes.TryGetValue(nodeId, out var node))
@@ -424,7 +445,7 @@ public class Graph{
         //接收消息
         var result = await node.ReceiveMessage(attribute);
         
-        _logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute+" success");
+        Core.Logger.Debug("Receive message from node "+nodeId+" with attribute "+attribute+" success");
         
         return result;
     }

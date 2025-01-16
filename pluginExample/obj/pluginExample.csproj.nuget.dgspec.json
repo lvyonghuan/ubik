@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {}
+    "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj": {}
   },
   "projects": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {
-      "version": "0.0.7",
+    "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj": {
+      "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
-        "projectName": "Ubique",
-        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj",
+        "projectName": "PluginExample",
+        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\obj\\",
+        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,13 +40,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.NET.Test.Sdk": {
+            "Ubique": {
               "target": "Package",
-              "version": "[17.12.0, )"
-            },
-            "NUnit": {
-              "target": "Package",
-              "version": "[4.3.1, )"
+              "version": "[0.0.7, )"
             }
           },
           "imports": [

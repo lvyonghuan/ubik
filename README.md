@@ -7,8 +7,6 @@ one knows. I am called Ubik, but that is not my name. I am. I shall always be.</
 
 ---
 
-Stop update until I finish my stupid final tests.
-
 TODO:
 
 - dynamic links
