@@ -10,8 +10,8 @@ public class AddPrint:IRuntimeNode
     private Communicator _communicator;
     // private UbikLogger _logger;
 
-    private Channel<int> _numAChannel = Channel.CreateUnbounded<int>();
-    private Channel<int> _numBChannel = Channel.CreateUnbounded<int>();
+    private Channel<int> _numAChannel = Channel.CreateBounded<int>(1);
+    private Channel<int> _numBChannel = Channel.CreateBounded<int>(1);
     
     public bool GetUserParams(string key, object value)
     {
@@ -39,40 +39,40 @@ public class AddPrint:IRuntimeNode
 
     private void GetNumA()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             while (true)
             {
                 var newNum = _communicator.Receive("num_A");
                 var numA = (int)newNum.Result;
-                _numAChannel.Writer.WriteAsync(numA);
+                await _numAChannel.Writer.WriteAsync(numA);
             }
         });
     }
 
     private void GetNumB()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             while (true)
             {
                 var newNum = _communicator.Receive("num_B");
                 var numB = (int)newNum.Result;
-                _numBChannel.Writer.WriteAsync(numB);
+                await _numBChannel.Writer.WriteAsync(numB);
             }
         });
     }
     
     private void SendOutput()
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             while (true)
             {
-                var numA = _numAChannel.Reader.ReadAsync();
-                var numB = _numBChannel.Reader.ReadAsync();
+                var numA = await _numAChannel.Reader.ReadAsync();
+                var numB = await _numBChannel.Reader.ReadAsync();
 
-                var result = numA.Result + numB.Result;
+                var result = numA + numB;
                 
                 Console.WriteLine(numA+"+"+numB+"="+result);
                 
