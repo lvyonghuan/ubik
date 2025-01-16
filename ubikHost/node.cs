@@ -30,17 +30,27 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
 
     public void AddNode(int id,Node node)
     {
-        plugin.AddNode(id,node);
+        _plugin.AddNode(id,node);
     }
 
     public void RemoveNode(int id)
     {
-        plugin.RemoveNode(id);
+        _plugin.RemoveNode(id);
+    }
+    
+    public void SetPlugin(Plugin plugin)
+    {
+        _plugin = plugin;
     }
 
     public void SetCommunicator(int id,Communicator communicator)
     {
-        plugin.AddCommunicationToNode(id,communicator);
+        _plugin.AddCommunicationToNode(id,communicator);
+    }
+    
+    public void Run(int id)
+    {
+        _plugin.Run(id);
     }
 }
 

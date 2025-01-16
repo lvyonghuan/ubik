@@ -37,6 +37,71 @@ public class Core
         }
     }
 
+    public int AddNode(string nodeName)
+    {
+        if (!_nodes.TryGetValue(nodeName, out var node))
+        {
+            throw new UbikException("node " + nodeName + " not found");
+        }
+
+        return node.AddRuntimeNode();
+    }
+    
+    public void RemoveNode(int nodeId)
+    {
+        Graph.RemoveNode(nodeId);
+    }
+    
+    public void UpdateEdge(int producerNodeId,int consumerNodeId,string producerPointName,string consumerPointName)
+    {
+        Graph.UpdateEdge(producerNodeId,consumerNodeId,producerPointName,consumerPointName);
+    }
+    
+    public void DeleteEdge(int producerNodeId,int consumerNodeId,string producerPointName,string consumerPointName)
+    {
+        Graph.DeleteEdge(producerNodeId,consumerNodeId,producerPointName,consumerPointName);
+    }
+    
+    public UbikException BeforeRunSet()
+    {
+        try
+        {
+            //挂载所有插件
+            foreach (var plugin in _plugins)
+            {
+                Logger.Debug("Mounting plugin " + plugin.Key);
+                var isMount=plugin.Value.Mount();
+                if (isMount)
+                {
+                    _MountPlugins.TryAdd(plugin.Key, plugin.Value);
+                }
+            }
+            
+            //将逻辑节点加入插件
+            foreach (var plugin in _MountPlugins)
+            {
+                plugin.Value.AddNodeToPlugin();
+            }
+            
+            Graph.BeforeRunSet();
+        }
+        catch (UbikException e)
+        {
+            return e;
+        }
+        catch (Exception e)
+        {
+            return new UbikException(e.Message);
+        }
+        
+        return null;
+    }
+    
+    public void Run()
+    {
+        Graph.Run();
+    }
+
     private class Config
     {
         public Log log = new Log();
@@ -68,38 +133,6 @@ public class Core
             log.IsSaveLog = config.log.IsSaveLog;
             log.LogSavePath = config.log.LogSavePath;
         }
-    }
-
-    public static UbikException BeforeRun()
-    {
-        try
-        {
-            //挂载所有插件
-            foreach (var plugin in _plugins)
-            {
-                var isMount=plugin.Value.Mount();
-                if (isMount)
-                {
-                    _MountPlugins.TryAdd(plugin.Key, plugin.Value);
-                }
-            }
-            
-            //将逻辑节点加入插件
-            foreach (var plugin in _MountPlugins)
-            {
-                plugin.Value.AddNodeToPlugin();
-            }
-        }
-        catch (UbikException e)
-        {
-            return e;
-        }
-        catch (Exception e)
-        {
-            return new UbikException(e.Message);
-        }
-        
-        return null;
     }
 
     private class Load
@@ -144,6 +177,7 @@ public class Core
                     }
 
                     Logger.Debug("Start loading node " + node.Name);
+                    node.SetPlugin(pluginInfo);
                     if (!_nodes.TryAdd(node.Name, node))
                     {
                         Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +

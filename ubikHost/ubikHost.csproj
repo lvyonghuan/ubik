@@ -10,7 +10,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
       <PackageReference Include="NUnit" Version="4.3.1" />
-      <PackageReference Include="Ubique" Version="0.0.5" />
+      <PackageReference Include="Ubique" Version="0.0.7" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,5 +24,7 @@
       <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.4\contentFiles\any\net8.0\testhost.exe" />
       <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.5\contentFiles\any\net8.0\testhost.dll" />
       <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.5\contentFiles\any\net8.0\testhost.exe" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.dll" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.exe" />
     </ItemGroup>
 </Project>

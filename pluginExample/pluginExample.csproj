@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>PluginExample</AssemblyName>
+        <RootNamespace>PluginExample</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ubique" Version="0.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.5\contentFiles\any\net8.0\testhost.dll" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.5\contentFiles\any\net8.0\testhost.exe" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.exe" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.dll" />
+    </ItemGroup>
+
+</Project>

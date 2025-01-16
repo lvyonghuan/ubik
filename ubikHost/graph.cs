@@ -9,7 +9,7 @@ public class Graph{
     private static List<RuntimeNode> _enterNodes = new List<RuntimeNode>(); // 入口节点
     private  static readonly ReaderWriterLockSlim GraphLock = new ReaderWriterLockSlim(); // 图读写锁    
 
-    public static void BeforeRunSet()
+    public void BeforeRunSet()
     {
         //初始化运行时节点
         foreach (var node in _runtimeNodes.Values)
@@ -28,6 +28,14 @@ public class Graph{
             }
             
             node.InitRuntimeNode(consumerBuffers, consumerBuffer);
+        }
+    }
+
+    public void Run()
+    {
+        foreach (var node in _runtimeNodes.Values)
+        {
+            node.Run();
         }
     }
     
@@ -98,6 +106,13 @@ public class Graph{
         private void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
         {
             _communicator.SetBuffer(consumerBuffers,consumerBuffer);
+        }
+        
+        public void Run()
+        {
+            Core.Logger.Debug("Run node "+Node.Name);
+            State = Running;
+            Node.Run(Id);
         }
         
         //测试接口//
@@ -221,15 +236,16 @@ public class Graph{
     // 2.出点A检查自己是否已经与入点C建立连接。若已经建立，则直接返回（可发出警告信息）。
     // 3.入点C检查自己是否已经和其他出点建立连接。若有连接，则断开连接。
     // 4.出点A与入点C建立连接。
-    public static void UpdateEdge(int producerNodeId,int consumerNodeId,Value producerNodePointValue,Value consumerNodePointValue)
+    public static void UpdateEdge(int producerNodeId,int consumerNodeId,string producerNodePointName,string consumerNodePointName)
     {
-        var producerNodePointName = producerNodePointValue.Name;
-        var consumerNodePointName = consumerNodePointValue.Name;
+        var producerNode = GetRuntimeNode(producerNodeId);
+        var consumerNode = GetRuntimeNode(consumerNodeId);
+        
             
         Core.Logger.Debug("Update edge from node "+producerNodeId+" to node "+consumerNodeId+" with point "+producerNodePointName);
         
         //检查合法性,获取连接对象
-        CheckUpdateValid(producerNodeId,consumerNodeId, producerNodePointName,consumerNodePointName, out var producerNode, out var consumerNode, out var hasConsumerNodeLinkedOtherNode);
+        CheckUpdateValid(producerNode,consumerNode, producerNodePointName,consumerNodePointName,out var producerNodePointValue,out var consumerNodePointValue, out var hasConsumerNodeLinkedOtherNode);
             
         //写锁
         GraphLock.EnterWriteLock();
@@ -263,50 +279,39 @@ public class Graph{
     }
         
     //检查更新边合法性
-    private static void CheckUpdateValid(int producerNodeId,int consumerNodeId,string producerNodePointName, string consumerNodePointName,out RuntimeNode producerNode,out RuntimeNode consumerNode,out bool hasConsumerNodeLinkedOtherNode)
+    private static void CheckUpdateValid(RuntimeNode producerNode,RuntimeNode consumerNode,string producerNodePointName, string consumerNodePointName,out Value producerNodePointValue,out Value consumerNodePointValue,out bool hasConsumerNodeLinkedOtherNode)
     {
         //读锁
         GraphLock.EnterReadLock();
         try
         {
-            //检查生产者节点是否存在
-            if (!_runtimeNodes.TryGetValue(producerNodeId, out var producerNodeTmp))
-            {
-                throw new UbikException("Node "+producerNodeId+" not exist ");
-            }
             //检查出点是否存在于生产者节点中
-            if (!producerNodeTmp.Points.Output.TryGetValue(producerNodePointName, out var edges))
+            if (!producerNode.Points.Output.TryGetValue(producerNodePointName, out var edges))
             {
                 throw new UbikException("Output point " + producerNodePointName + " not exist ");
             }
             //检查生产者节点是否已经连接了当前消费者节点
-            if (edges.Any(e => e.NodeId == consumerNodeId))
+            if (edges.Any(e => e.NodeId == consumerNode.Id))
             {
-                throw new UbikException("Output point already linked in node " + producerNodeTmp.Node.Name);
+                throw new UbikException("Output point already linked in node " + producerNode.Node.Name);
             }
-                
-            //检查消费者节点是否存在
-            if (!_runtimeNodes.TryGetValue(consumerNodeId, out var consumerNodeTmp))
-            {
-                throw new UbikException("Node "+consumerNodeId+" not exist ");
-            }
+            producerNodePointValue = producerNode.Node.Output.Find(e => e.Name == producerNodePointName);
+            
             //检查入点是否存在于消费者节点中
-            if (!consumerNodeTmp.Points.Input.TryGetValue(consumerNodePointName, out var edge))
+            if (!consumerNode.Points.Input.TryGetValue(consumerNodePointName, out var edge))
             {
-                throw new UbikException("Input point "+consumerNodePointName+" not exist in node " + consumerNodeTmp.Node.Name);
+                throw new UbikException("Input point "+consumerNodePointName+" not exist in node " + consumerNode.Node.Name);
             }
+            consumerNodePointValue = edge.Value;
                 
             //检查入点是否已经和其他(包括生产者节点)节点连接
             hasConsumerNodeLinkedOtherNode = edge.NodeId != 0;
             
             //检查属性是否一致
-            if (producerNodeTmp.Node.Output.First(e => e.Name == producerNodePointName).Attribute != consumerNodeTmp.Node.Input.First(e => e.Name == consumerNodePointName).Attribute)
+            if (producerNode.Node.Output.First(e => e.Name == producerNodePointName).Attribute != consumerNode.Node.Input.First(e => e.Name == consumerNodePointName).Attribute)
             {
                 throw new UbikException("Output point "+producerNodePointName+" and input point "+consumerNodePointName+" attribute not match");
             }
-                
-            producerNode = producerNodeTmp;
-            consumerNode = consumerNodeTmp;
         }
         finally
         {
@@ -384,6 +389,23 @@ public class Graph{
                 
             producerNode = producerNodeTmp;
             consumerNode = consumerNodeTmp;
+        }
+        finally
+        {
+            GraphLock.ExitReadLock();
+        }
+    }
+    
+    private static RuntimeNode GetRuntimeNode(int nodeId)
+    {
+        GraphLock.EnterReadLock();
+        try
+        {
+            if (!_runtimeNodes.TryGetValue(nodeId, out var node))
+            {
+                throw new UbikException("Node "+nodeId+" not exist ");
+            }
+            return node;
         }
         finally
         {

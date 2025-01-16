@@ -11,8 +11,7 @@
           "lib/netcoreapp3.1/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {}
         },
         "build": {
-          "build/netstandard2.0/Microsoft.CodeCoverage.props": {},
-          "build/netstandard2.0/Microsoft.CodeCoverage.targets": {}
+          "build/netstandard2.0/_._": {}
         }
       },
       "Microsoft.NET.Test.Sdk/17.12.0": {
@@ -28,11 +27,10 @@
           "lib/netcoreapp3.1/_._": {}
         },
         "build": {
-          "build/netcoreapp3.1/Microsoft.NET.Test.Sdk.props": {},
-          "build/netcoreapp3.1/Microsoft.NET.Test.Sdk.targets": {}
+          "build/netcoreapp3.1/_._": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/_._": {}
         }
       },
       "Microsoft.TestPlatform.ObjectModel/17.12.0": {
@@ -281,7 +279,7 @@
           }
         },
         "build": {
-          "build/netcoreapp3.1/Microsoft.TestPlatform.TestHost.props": {}
+          "build/netcoreapp3.1/_._": {}
         }
       },
       "Newtonsoft.Json/13.0.1": {
@@ -316,7 +314,7 @@
           }
         },
         "build": {
-          "build/NUnit.props": {}
+          "build/_._": {}
         }
       },
       "System.Reflection.Metadata/1.6.0": {
@@ -329,6 +327,35 @@
         "runtime": {
           "lib/netstandard2.0/System.Reflection.Metadata.dll": {
             "related": ".xml"
+          }
+        }
+      },
+      "Ubique/0.0.7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NET.Test.Sdk": "17.12.0",
+          "NUnit": "4.3.1"
+        },
+        "compile": {
+          "lib/net8.0/ubique.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/ubique.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        },
+        "contentFiles": {
+          "contentFiles/any/net8.0/testhost.dll": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/net8.0/testhost.exe": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
           }
         }
       }
@@ -667,25 +694,41 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Ubique/0.0.7": {
+      "sha512": "OChwxHIeI83dFszfmUEdh3nye0zgYPNkqbhwqLrF7ujLEimB4YN5zE1jtVUZRbeT84s3yVNIZw5yhO6krcECYQ==",
+      "type": "package",
+      "path": "ubique/0.0.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/testhost.dll",
+        "content/testhost.exe",
+        "contentFiles/any/net8.0/testhost.dll",
+        "contentFiles/any/net8.0/testhost.exe",
+        "lib/net8.0/ubique.dll",
+        "lib/net8.0/ubique.runtimeconfig.json",
+        "ubique.0.0.7.nupkg.sha512",
+        "ubique.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Microsoft.NET.Test.Sdk >= 17.12.0",
-      "NUnit >= 4.3.1"
+      "Ubique >= 0.0.7"
     ]
   },
   "packageFolders": {
     "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "0.0.7",
+    "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
-      "projectName": "Ubique",
-      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+      "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj",
+      "projectName": "PluginExample",
+      "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\pluginExample.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\obj\\",
+      "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\pluginExample\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -714,13 +757,9 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "Microsoft.NET.Test.Sdk": {
+          "Ubique": {
             "target": "Package",
-            "version": "[17.12.0, )"
-          },
-          "NUnit": {
-            "target": "Package",
-            "version": "[4.3.1, )"
+            "version": "[0.0.7, )"
           }
         },
         "imports": [

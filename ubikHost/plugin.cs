@@ -1,4 +1,6 @@
+using System.Reflection;
 using System.Runtime.InteropServices;
+using NUnit.Framework.Internal;
 using ubique.util;
 using ubique.plugin;
 
@@ -18,7 +20,7 @@ public class Plugin
     private int _count = 0;
     private IPlugin _plugin;
 
-    private const string PluginPath = "./plugins/";
+    private const string PluginPath = @"\plugins\";
 
     //挂载插件，返回是否被挂载
     public bool Mount()
@@ -27,6 +29,7 @@ public class Plugin
         //如果count>0
         //表示该plugin挂载在图上的节点数量大于0
         //需要进行物理挂载
+        Core.Logger.Debug("mount plugin " + Name+", count:"+_count);
         if (_count > 0)
         {
            if (NetCall)
@@ -37,11 +40,13 @@ public class Plugin
            {
                DlMount(opSys);
            }
+           Core.Logger.Debug("plugin " + Name + " mounted");
            return true;
         }
         return false;
     }
 
+    //TODO update because remove node
     public void AddNodeToPlugin()
     {
         if(_plugin==null)
@@ -93,6 +98,18 @@ public class Plugin
         _count--;
     }
 
+    public void Run(int id)
+    {
+        if (!_iRuntimeNodes.TryGetValue(id, out var iRuntimeNode))
+        {
+            throw new UbikException("node " + id + " not found in plugin " + Name);
+        }
+        if (!iRuntimeNode.Run())
+        {
+            throw new UbikException("node " + id + " run failed");
+        }
+    }
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate IPlugin Init();
 
@@ -124,17 +141,38 @@ public class Plugin
                 throw new UbikException("unknown os");
         }
 
-        var path = PluginPath + Name + "/" + Name + suffix;
+        var path = Directory.GetCurrentDirectory()+PluginPath + Name + @"\" + Name + suffix;
         if (!File.Exists(path))
         {
+            Core.Logger.Debug("Current Directory: " + Directory.GetCurrentDirectory());
+            Core.Logger.Debug(path);
             throw new UbikException("plugin " + Name + " not found");
         }
+        Core.Logger.Debug(path);
 
-        IntPtr handle = NativeLibrary.Load(path);
         try
         {
-            var ptr = NativeLibrary.GetExport(handle, "Init");
-            var init = Marshal.GetDelegateForFunctionPointer<Init>(ptr);
+            Assembly pluginAssembly = Assembly.LoadFile(path);
+            if (pluginAssembly == null)
+            {
+                throw new UbikException("plugin " + Name + " load failed");
+            }
+            var pluginType = pluginAssembly.GetType( Name + "."+Name);
+            if (pluginType == null)
+            {
+                Core.Logger.Debug(Name + "."+Name);
+                throw new UbikException("plugin " + Name + " type not found");
+            }
+            var method = pluginType.GetMethod("Init");
+            if (method == null)
+            {
+                throw new UbikException("plugin " + Name + " init method not found");
+            }
+            var init = (Init) Delegate.CreateDelegate(typeof(Init), method);
+            if (init == null)
+            {
+                throw new UbikException("plugin " + Name + " init delegate create failed");
+            }
             _plugin = init();
         }
         catch (Exception e)
