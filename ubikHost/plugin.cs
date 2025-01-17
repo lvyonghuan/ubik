@@ -148,8 +148,7 @@ public class Plugin
             Core.Logger.Debug(path);
             throw new UbikException("plugin " + Name + " not found");
         }
-        Core.Logger.Debug(path);
-
+        
         try
         {
             Assembly pluginAssembly = Assembly.LoadFile(path);

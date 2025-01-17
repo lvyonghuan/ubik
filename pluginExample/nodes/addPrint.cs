@@ -8,7 +8,6 @@ namespace PluginExample.nodes;
 public class AddPrint:IRuntimeNode
 {
     private Communicator _communicator;
-    // private UbikLogger _logger;
 
     private Channel<int> _numAChannel = Channel.CreateBounded<int>(1);
     private Channel<int> _numBChannel = Channel.CreateBounded<int>(1);
