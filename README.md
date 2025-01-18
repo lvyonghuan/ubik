@@ -9,7 +9,7 @@ one knows. I am called Ubik, but that is not my name. I am. I shall always be.</
 
 TODO:
 
-- dynamic links
+- net router
 - grpc func
 - example plugin
 - client, and client-hosts link
