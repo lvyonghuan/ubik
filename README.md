@@ -7,6 +7,10 @@ one knows. I am called Ubik, but that is not my name. I am. I shall always be.</
 
 ---
 
+There was a lack of computer working environment during the winter vacation, so work resumed in February.
+
+---
+
 TODO:
 
 - net router
