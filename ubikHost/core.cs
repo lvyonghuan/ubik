@@ -35,6 +35,9 @@ public class Core
             Logger.Debug("Start loading plugin nodes");
             Load.LoadPluginNodes(TestPathPrefix + PluginPath);
         }
+        
+        //初始化网络API
+        
     }
 
     public int AddNode(string nodeName)

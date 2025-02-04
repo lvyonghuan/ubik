@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DnyM0k98guXCpVNGWM31VFukdEYUjSzfigs9xJ2tBsUMg5JUIr7n4k9btmPvuaVw1MmF9B9Wa25BRiQNN9DNog==",
+  "dgSpecHash": "FQHV3+lBLZI=",
   "success": true,
-  "projectFilePath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+  "projectFilePath": "H:\\work\\ubik\\ubique\\ubique.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.codecoverage\\17.12.0\\microsoft.codecoverage.17.12.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.test.sdk\\17.12.0\\microsoft.net.test.sdk.17.12.0.nupkg.sha512",

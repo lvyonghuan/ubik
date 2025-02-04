@@ -63,7 +63,7 @@
             "name": "num_A",
             "type": "int"
         },
-        {
+        { 
             "attribute": "int",
             "name": "num_B",
             "type": "int"

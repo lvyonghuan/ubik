@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {}
+    "H:\\work\\ubik\\ubique\\ubique.csproj": {}
   },
   "projects": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj": {
+    "H:\\work\\ubik\\ubique\\ubique.csproj": {
       "version": "0.0.7",
       "restore": {
-        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+        "projectUniqueName": "H:\\work\\ubik\\ubique\\ubique.csproj",
         "projectName": "Ubique",
-        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\ubique.csproj",
+        "projectPath": "H:\\work\\ubik\\ubique\\ubique.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubique\\obj\\",
+        "outputPath": "H:\\work\\ubik\\ubique\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -65,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Administrator\\.dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
