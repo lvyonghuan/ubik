@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using ubique.util;
 
@@ -11,8 +12,9 @@ public class Router(Core core)
     public void Init()
     {
         var builder = WebApplication.CreateBuilder();
+        builder.WebHost.UseUrls("http://localhost:8080");
         var app = builder.Build();
-
+        
         app.MapPost("/node",(HttpContext h)=>AddNode(h));//添加节点
         app.MapDelete("/node", (HttpContext h)=>RemoveNode(h));//删除节点
         
@@ -191,7 +193,7 @@ public class Router(Core core)
     private IResult Run(HttpContext context)
     {
         try{
-            Task.Run(() => _core.Run());
+            Task.Run(() => _core.Run());//TODO 管理线程
         }
         catch (UbikException e)
         {
@@ -222,8 +224,8 @@ public class Router(Core core)
  
     private class Response
     {
-        public int Code;
-        public string? Error;
-        public object? Data;
+        public int Code { get; set; }
+        public string? Error { get; set; }
+        public object? Data { get; set; }
     }
 }

@@ -11,4 +11,11 @@ public class CoreTest
     {
         var c = new Core(ConfigPath,true);
     }
+
+    [Test]
+    public static void TestInitCoreWithRouter()
+    {
+        var c = new Core(ConfigPath,true);
+        c.StartRouter();
+    }
 }

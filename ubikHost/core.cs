@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ubikHost.api;
 using ubique.util;
 
 namespace ubikHost;
@@ -9,6 +10,7 @@ public class Core
     private static Dictionary<string,Plugin> _MountPlugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
     public Graph Graph = new Graph();
+    private Router _router;
     private readonly Config _config = new Config();
 
     public static UbikLogger Logger { get; private set; }
@@ -37,7 +39,13 @@ public class Core
         }
         
         //初始化网络API
-        
+        _router = new Router(this);
+    }
+
+    //启动网络API
+    public void StartRouter()
+    {
+        _router.Init();
     }
 
     public int AddNode(string nodeName)

@@ -20,5 +20,6 @@
     &lt;TestId&gt;NUnit3x::75F71CC7-82DE-4882-BF66-39BF5985E536::net8.0::ubique.plugin.CommunicatorDLTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.PluginTest.TestMount&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.PluginTest.TestRemoveNode&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.CoreTest.TestInitCoreWithRouter&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
