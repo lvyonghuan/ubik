@@ -20,7 +20,7 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
+  "error": null,
   "data": {
     "id": 1
   }
@@ -47,8 +47,8 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
-  "data": {}
+  "error": null,
+  "data": null
 }
 ```
 
@@ -76,8 +76,8 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
-  "data": {}
+  "error": null,
+  "data": null
 }
 ```
 
@@ -103,8 +103,8 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
-  "data": {}
+  "error": null,
+  "data": null
 }
 ```
 
@@ -127,8 +127,8 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
-  "data": {}
+  "error": null,
+  "data": null
 }
 ```
 
@@ -151,7 +151,7 @@ If successful, the response will be like:
 ```json
 {
   "status": 200,
-  "error": "",
-  "data": {}
+  "error": null,
+  "data": null
 }
 ```

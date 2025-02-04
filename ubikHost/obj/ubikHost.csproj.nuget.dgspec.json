@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj": {}
+    "H:\\work\\ubik\\ubikHost\\ubikHost.csproj": {}
   },
   "projects": {
-    "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj": {
+    "H:\\work\\ubik\\ubikHost\\ubikHost.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
+        "projectUniqueName": "H:\\work\\ubik\\ubikHost\\ubikHost.csproj",
         "projectName": "ubikHost",
-        "projectPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
+        "projectPath": "H:\\work\\ubik\\ubikHost\\ubikHost.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\obj\\",
+        "outputPath": "H:\\work\\ubik\\ubikHost\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,12 +32,21 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.12.0, )"
@@ -65,11 +72,14 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Administrator\\.dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
