@@ -45,7 +45,14 @@ public class Core
     //启动网络API
     public void StartRouter()
     {
-        _router.Init();
+        try
+        {
+            _router.Init();
+        }
+        catch(Exception e)
+        {
+            Logger.Fatal(e);
+        }
     }
 
     public int AddNode(string nodeName)

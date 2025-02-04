@@ -12,7 +12,7 @@ public class Router(Core core)
     public void Init()
     {
         var builder = WebApplication.CreateBuilder();
-        builder.WebHost.UseUrls("http://localhost:8080");
+        builder.WebHost.UseUrls("http://localhost:11450");
         var app = builder.Build();
         
         app.MapPost("/node",(HttpContext h)=>AddNode(h));//添加节点
