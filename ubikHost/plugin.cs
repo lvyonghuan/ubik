@@ -20,7 +20,7 @@ public class Plugin
     private Dictionary<int,Node> _runtimeNodes=new Dictionary<int, Node>();
     private Dictionary<int,IRuntimeNode> _iRuntimeNodes=new Dictionary<int, IRuntimeNode>();
 
-    private int _count = 0;
+    private int _count = 0;//挂载在图上的节点数量
     private IPlugin _plugin;
 
     private const string PluginPath = @"\plugins\";
@@ -121,6 +121,8 @@ public class Plugin
     private const string WindowsNetMountSuffix = ".bat";
     private const string LinuxNetMountSuffix = ".sh";
 
+    private string _rpcPort = "9876";
+
     //TODO 传递host端口号
     private void NetMount(OpSys opSys)
     {
@@ -151,6 +153,7 @@ public class Plugin
             StartInfo = new ProcessStartInfo
             {
                 FileName = path,
+                Arguments = _rpcPort, //传递rpc端口号
                 RedirectStandardOutput = true,
                 UseShellExecute = true,
                 CreateNoWindow = false
@@ -166,12 +169,24 @@ public class Plugin
             throw new UbikException("plugin " + Name + " net mount error: " + e);
         }
     }
+    
+    //设置rpc端口号
+    public void SetRpcPort(int rpcPort)
+    {
+        try
+        {
+            _rpcPort = rpcPort.ToString();
+        }
+        catch (Exception e)
+        {
+            throw new UbikException("plugin " + Name + " set rpc port error: " + e);
+        }
+    }
 
     //使用动态链接库启动动态挂载程序
     private const string WindowsDlMountSuffix = ".dll";
     private const string LinuxDlMountSuffix = ".so";
 
-    //FIXME 多个插件使用一个库，只挂载一次应该即可
     private void DlMount(OpSys opSys)
     {
         var suffix = "";
