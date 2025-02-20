@@ -131,6 +131,7 @@ public class Core
             public string LogSavePath { get; set; } = "./";
         }
 
+        //读取core配置文件
         public void ReadConfig(string filePath)
         {
             var jsonString = File.ReadAllText(filePath);
@@ -155,6 +156,7 @@ public class Core
 
     private class Load
     {
+        //加载插件
         public static void LoadPluginNodes(string pluginPath)
         {
             Logger.Debug("Start loading plugin nodes");
@@ -166,17 +168,28 @@ public class Core
             {
                 Logger.Debug("Start loading plugin " + Path.GetFileName(pluginDir));
                 var infoPath = Path.Combine(pluginDir, "info.json");
-                var info = File.ReadAllText(infoPath);
-
+                
+                string info;
+                try{
+                    info = File.ReadAllText(infoPath);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
+                                                            " info error, info.json file not found"));
+                    continue;
+                }
+                
+                //解析info.json文件
                 var pluginInfo = JsonConvert.DeserializeObject<Plugin>(info);
-                if (pluginInfo == null)
+                if (pluginInfo == null)//info.json文件为空
                 {
                     Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
                                                             " info error, info is null, and it should not be null"));
                     continue;
                 }
                 
-                if (!_plugins.TryAdd(pluginInfo.Name, pluginInfo))
+                if (!_plugins.TryAdd(pluginInfo.Name, pluginInfo))//插件名字已经存在
                 {
                     Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
                                                             " info error, plugin name " + pluginInfo.Name +

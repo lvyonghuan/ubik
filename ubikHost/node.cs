@@ -38,6 +38,7 @@ public class Node(string name, string info, bool isBeginningNode,bool needNetCal
         _plugin.RemoveNode(id);
     }
     
+    // 添加插件（父）信息
     public void SetPlugin(Plugin plugin)
     {
         _plugin = plugin;

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ubikHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b314f6f97789e7320fd3eb6640c56274dc5fd989")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54be3b4cd4b5436205a5978f796b38814408b3c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ubikHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ubikHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
