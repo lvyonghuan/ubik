@@ -13,6 +13,15 @@ public interface Communicator
     public Task<object> Receive(string pointName);
 }
 
+//Status list
+public enum Status
+{
+    UnRunning,
+    Running,
+    Stop,
+    Fault,
+}
+
 public class ConsumerBuffer
 {
     public Channel<object> Ch = Channel.CreateUnbounded<object>();
@@ -56,9 +65,9 @@ public class CommunicatorDL(int runtimeNodeId):Communicator
         return result;
     }
     
-    public bool ReportState(int state)
+    public Status ReportStatus(Status status)
     {
-        return true;
+        return Status.Running;
     }
 }
 
@@ -68,6 +77,8 @@ public class CommunicatorGrpc(int runtimeNodeId):Communicator
     
     private Dictionary<string,List<ConsumerBuffer>> _consumerBuffers=new Dictionary<string,List<ConsumerBuffer>>();
     private Dictionary<string,ConsumerBuffer> _consumerBuffer=new Dictionary<string,ConsumerBuffer>();
+    
+    private Status _currentStatus=Status.UnRunning;
     
     public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
     {
@@ -86,5 +97,8 @@ public class CommunicatorGrpc(int runtimeNodeId):Communicator
         return Task.FromResult<object>(null);
     }
 
-    //TODO
+    public Status ReportStatus(Status status)
+    {
+        return _currentStatus;
+    }
 }

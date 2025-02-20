@@ -45,4 +45,7 @@ public interface IRuntimeNode
     //Return true if success.
     //if not beginning node, just return true.
     public bool Run();
+    
+    //Report current status of the node.
+    public Status ReportStatus(Status status);
 }

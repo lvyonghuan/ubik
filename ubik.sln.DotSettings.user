@@ -1,7 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer /&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2b2f648c_002D06a5_002D4ef9_002D908b_002De45e004bf61f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestGraph" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2b2f648c_002D06a5_002D4ef9_002D908b_002De45e004bf61f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestGraph" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.TestGraph&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.CoreTest.TestInitCore&lt;/TestId&gt;&#xD;
@@ -10,7 +10,7 @@
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eb4c44c2_002D4639_002D4730_002D8575_002Dc9891cd429c4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestLogPrint" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eb4c44c2_002D4639_002D4730_002D8575_002Dc9891cd429c4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestLogPrint" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.CoreTest.TestInitCore&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::9DF9B368-7696-4F1D-B345-05F22EC47D60::net8.0::ubikHost.TestGraph&lt;/TestId&gt;&#xD;

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package ubique;
+
+service HeartbeatService {
+  rpc Ping(PingMessage) returns (PongMessage);
+}
+
+message PingMessage {}
+
+message PongMessage {
+  string message = 1;
+}
+
+service HostService{
+  rpc SendMessage(SendMessageRequest) returns (Response);
+  rpc Stop(StopRequest) returns (Response);
+  rpc Run(RunRequest) returns (Response);
+}
+
+message SendMessageRequest {
+  uint32 nodeID = 1;
+  string pointName = 2;
+  bytes message = 3;
+}
+
+message StopRequest {
+  uint32 nodeID = 1;
+  string pointName = 2;
+}
+
+message RunRequest {
+  uint32 nodeID = 1;
+  string pointName = 2;
+}
+
+message Response {
+  uint32 status = 1;
+}
+
+service PluginService {
+  rpc SendMessage(SendMessageRequest) returns (Response);
+}
