@@ -25,8 +25,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="ubique.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.dll" />
+      <Content Remove="C:\Users\Administrator\.nuget\packages\ubique\0.0.7\contentFiles\any\net8.0\testhost.exe" />
     </ItemGroup>
 </Project>

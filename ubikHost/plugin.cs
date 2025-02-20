@@ -121,6 +121,7 @@ public class Plugin
     private const string WindowsNetMountSuffix = ".bat";
     private const string LinuxNetMountSuffix = ".sh";
 
+    //TODO 传递host端口号
     private void NetMount(OpSys opSys)
     {
         //根据系统决定执行脚本的后缀名

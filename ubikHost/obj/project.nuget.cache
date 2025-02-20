@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EYBag+ea1Zs=",
+  "dgSpecHash": "JMZa7Mj22liqDOnJEVqCUR4gg2iLqhjUvv7s7Y3SdxPMctDbQcW4FrQ4/cSQiCJCpf46fE+Y8lzsS4YWLL9emw==",
   "success": true,
-  "projectFilePath": "H:\\work\\ubik\\ubikHost\\ubikHost.csproj",
+  "projectFilePath": "I:\\c-sharp\\ubik\\ubikCore\\ubikHost\\ubikHost.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\google.protobuf\\3.30.0-rc1\\google.protobuf.3.30.0-rc1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\grpc.aspnetcore\\2.67.0\\grpc.aspnetcore.2.67.0.nupkg.sha512",
