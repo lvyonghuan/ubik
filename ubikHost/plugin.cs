@@ -121,9 +121,10 @@ public class Plugin
     private const string WindowsNetMountSuffix = ".bat";
     private const string LinuxNetMountSuffix = ".sh";
 
-    private string _rpcPort = "9876";
+    private string _hostRpcPort = "9876";
+    private int _pluginRpcPort = 0;
 
-    //TODO 传递host端口号
+    //TODO 验证传递host端口号
     private void NetMount(OpSys opSys)
     {
         //根据系统决定执行脚本的后缀名
@@ -153,7 +154,7 @@ public class Plugin
             StartInfo = new ProcessStartInfo
             {
                 FileName = path,
-                Arguments = _rpcPort, //传递rpc端口号
+                Arguments = _hostRpcPort, //传递rpc端口号
                 RedirectStandardOutput = true,
                 UseShellExecute = true,
                 CreateNoWindow = false
@@ -170,12 +171,25 @@ public class Plugin
         }
     }
     
-    //设置rpc端口号
-    public void SetRpcPort(int rpcPort)
+    //设置host端rpc端口号
+    public void SetHostRpcPort(int rpcPort)
     {
         try
         {
-            _rpcPort = rpcPort.ToString();
+            _hostRpcPort = rpcPort.ToString();
+        }
+        catch (Exception e)
+        {
+            throw new UbikException("plugin " + Name + " set rpc port error: " + e);
+        }
+    }
+    
+    //设置plugin端rpc端口号
+    public void SetPluginRpcPort(int rpcPort)
+    {
+        try
+        {
+            _pluginRpcPort = rpcPort;
         }
         catch (Exception e)
         {
@@ -248,5 +262,19 @@ public class Plugin
         //TODO 使用管道进行阻塞通知
         public static Dictionary<string,CancellationToken> MountingPlugins=new Dictionary<string, CancellationToken>();//正在挂载的插件的集合
         public static Dictionary<string,IPlugin> MountedPlugins=new Dictionary<string, IPlugin>();//已经挂载的插件的集合
+    }
+}
+
+
+//伪插件，实现了插件的接口，用于配合GRPC
+//伪插件和插件之间呈现一一映射的关系
+public class VirtualPlugin{
+    
+    //伪Node，用于配合GRPC，打通GRPC与动态链接之间的通信
+    //伪Node和plugin Node之间处于一一映射的关系
+    //伪Node接收来自图分配的管道，从管道读取数据，并将数据通过GRPC传递给plugin Node
+    public class VirtualNode
+    {
+        
     }
 }

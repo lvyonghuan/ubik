@@ -10,8 +10,9 @@ public class Core
     private static Dictionary<string,Plugin> _MountPlugins = new Dictionary<string, Plugin>();
     private static Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
     public Graph Graph = new Graph();
-    private Router _router;
+    private readonly Router _router;
     private readonly Config _config = new Config();
+    private readonly Rpc _rpc;
 
     public static UbikLogger Logger { get; private set; }
     public static OpSys OpSysType { get; private set; }
@@ -26,16 +27,20 @@ public class Core
         
         _config.ReadConfig(configPath);
         Logger = new UbikLogger(_config.log.LogLevel, _config.log.IsSaveLog, _config.log.LogSavePath);
+        
+        //初始化RPC服务
+        _rpc = new Rpc(this);
+        var port=_rpc.Init();
 
         //加载插件
         if (!isInTest)
         {
-            Load.LoadPluginNodes(PluginPath);
+            Load.LoadPluginNodes(PluginPath,port);
         }
         else
         {
             Logger.Debug("Start loading plugin nodes");
-            Load.LoadPluginNodes(TestPathPrefix + PluginPath);
+            Load.LoadPluginNodes(TestPathPrefix + PluginPath,port);
         }
         
         //初始化网络API
@@ -78,6 +83,16 @@ public class Core
     public void DeleteEdge(int producerNodeId,int consumerNodeId,string producerPointName,string consumerPointName)
     {
         Graph.DeleteEdge(producerNodeId,consumerNodeId,producerPointName,consumerPointName);
+    }
+    
+    public void SetPluginPort(string pluginName,int port)
+    {
+        if (!_MountPlugins.TryGetValue(pluginName, out var plugin))
+        {
+            throw new UbikException("plugin " + pluginName + " not found");
+        }
+        
+        plugin.SetPluginRpcPort(port);
     }
     
     public UbikException BeforeRunSet()
@@ -157,7 +172,7 @@ public class Core
     private class Load
     {
         //加载插件
-        public static void LoadPluginNodes(string pluginPath)
+        public static void LoadPluginNodes(string pluginPath,int port)
         {
             Logger.Debug("Start loading plugin nodes");
             //访问目录，获取目录下的所有文件夹
@@ -176,7 +191,7 @@ public class Core
                 catch (Exception e)
                 {
                     Logger.Error(new UbikException("load plugin " + Path.GetFileName(pluginDir) +
-                                                            " info error, info.json file not found"));
+                                                            " info error: " + e.Message));
                     continue;
                 }
                 
@@ -188,6 +203,9 @@ public class Core
                                                             " info error, info is null, and it should not be null"));
                     continue;
                 }
+                
+                //设置主机端口
+                pluginInfo.SetHostRpcPort(port);
                 
                 if (!_plugins.TryAdd(pluginInfo.Name, pluginInfo))//插件名字已经存在
                 {

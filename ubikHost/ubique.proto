@@ -2,20 +2,36 @@ syntax = "proto3";
 
 package ubique;
 
-service HeartbeatService {
+service Host {
+  rpc Handshake(HandshakeMessage) returns (PongMessage);
   rpc Ping(PingMessage) returns (PongMessage);
+  rpc SendMessage(SendMessageRequest) returns (Response);
+}
+
+service Plugin {
+  rpc CreateNode(CreateNodeRequest) returns (Response);
+
+  rpc SendMessage(SendMessageRequest) returns (Response);
+  rpc Stop(StopRequest) returns (Response);
+  rpc Run(RunRequest) returns (Response);
+}
+
+//HandshakeMessage is used to establish a connection
+//between the host and the plugin
+message HandshakeMessage {
+  string name = 1; //plugin's name, must same as the name in info.json
+  int32 port = 2;//plugin's port, you should implement some backoff mechanisms to avoid other plug-ins from squeezing the same port.
 }
 
 message PingMessage {}
 
 message PongMessage {
-  string message = 1;
+  int32 state = 1;//TODO: define the state code
 }
 
-service HostService{
-  rpc SendMessage(SendMessageRequest) returns (Response);
-  rpc Stop(StopRequest) returns (Response);
-  rpc Run(RunRequest) returns (Response);
+message CreateNodeRequest {
+  int32 id = 1;
+  string name = 2;
 }
 
 message SendMessageRequest {
@@ -38,6 +54,4 @@ message Response {
   uint32 status = 1;
 }
 
-service PluginService {
-  rpc SendMessage(SendMessageRequest) returns (Response);
-}
+//TODO: remove node

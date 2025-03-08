@@ -64,41 +64,4 @@ public class CommunicatorDL(int runtimeNodeId):Communicator
 
         return result;
     }
-    
-    public Status ReportStatus(Status status)
-    {
-        return Status.Running;
-    }
-}
-
-public class CommunicatorGrpc(int runtimeNodeId):Communicator
-{
-    private int _runtimeNodeId=runtimeNodeId;
-    
-    private Dictionary<string,List<ConsumerBuffer>> _consumerBuffers=new Dictionary<string,List<ConsumerBuffer>>();
-    private Dictionary<string,ConsumerBuffer> _consumerBuffer=new Dictionary<string,ConsumerBuffer>();
-    
-    private Status _currentStatus=Status.UnRunning;
-    
-    public void SetBuffer(Dictionary<string,List<ConsumerBuffer>> consumerBuffers,Dictionary<string,ConsumerBuffer> consumerBuffer)
-    {
-        _consumerBuffers=consumerBuffers;
-        _consumerBuffer=consumerBuffer;
-    }
-    
-    public void Send(string pointName,object message)
-    {
-        //TODO
-    }
-    
-    public Task<object> Receive(string pointName)
-    {
-        //TODO
-        return Task.FromResult<object>(null);
-    }
-
-    public Status ReportStatus(Status status)
-    {
-        return _currentStatus;
-    }
 }
