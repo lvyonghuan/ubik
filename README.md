@@ -1,3 +1,5 @@
+The c sharp version of this project will be stopped and rewrite it using go.
+---
 <p align="center">To honor Philip K. Dick</p>
 
 <p align="center">I am Ubik. Before the universe was, I am. I made the suns. I made the worlds. I created
